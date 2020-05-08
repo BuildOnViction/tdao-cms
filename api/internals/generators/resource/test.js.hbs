@@ -1,0 +1,140 @@
+'use strict';
+
+const Code = require('code');
+const Lab = require('lab');
+const LabbableServer = require('../../server.js');
+
+const lab = exports.lab = Lab.script();
+const describe = lab.describe;
+const it = lab.it;
+const before = lab.before;
+const expect = Code.expect;
+
+const _ = require('lodash');
+
+describe(('{{ pascalCase name }} APIS'), () => {
+
+  let server;
+  let token;
+
+  before((done) => {
+
+    LabbableServer.ready((err, srv) => {
+
+      expect(err).to.not.exist();
+
+      if (err) {
+        done(err);
+      }
+
+      server = srv;
+
+      token = global.token.token;
+
+      done();
+    });
+  });
+
+  it('Create one', (done) => {
+
+    let response;
+    server.inject({
+      method: 'POST',
+      url: '/{{ camelCase name }}s',
+      headers: {
+        'authorization': token
+      }
+    }, (res) => {
+
+      response = JSON.parse(res.payload);
+      expect(response.success).to.equal(true);
+      expect(res.statusCode).to.equal(200);
+      expect(response.data).to.be.a.object();
+      done();
+
+    });
+  });
+  
+
+  it('List', (done) => {
+
+    let response;
+    server.inject({
+      method: 'GET',
+      url: '/{{ camelCase name }}s',
+      headers: {
+        'authorization': token
+      }
+    }, (res) => {
+
+      response = JSON.parse(res.payload);
+      expect(res.statusCode).to.equal(200);
+      expect(response.success).to.equal(true);
+      expect(response.data).to.be.a.array();
+      expect(response.data.length).to.be.a.number().to.be.above(0);
+      done();
+
+    });
+  });
+
+  it('Get One', (done) => {
+
+    let response;
+    server.inject({
+      method: 'GET',
+      url: '/{{ camelCase name }}s/1',
+      headers: {
+        'authorization': token
+      }
+    }, (res) => {
+
+      response = JSON.parse(res.payload);
+      expect(response.success).to.equal(true);
+      expect(res.statusCode).to.equal(200);
+      expect(response.data).to.be.a.object();
+      done();
+
+    });
+  });
+
+  it('Update one', (done) => {
+
+    let response;
+    server.inject({
+      method: 'PUT',
+      url: '/{{ camelCase name }}s/1',
+      headers: {
+        'authorization': token
+      }
+    }, (res) => {
+
+      response = JSON.parse(res.payload);
+      expect(response.success).to.equal(true);
+      expect(res.statusCode).to.equal(200);
+      expect(response.data).to.be.a.object();
+      done();
+
+    });
+  });
+
+  it('Destroy ', (done) => {
+
+    let response;
+    server.inject({
+      method: 'GET',
+      url: '/{{ camelCase name }}s/1',
+      headers: {
+        'authorization': token
+      }
+    }, (res) => {
+
+      response = JSON.parse(res.payload);
+      expect(response.success).to.equal(true);
+      expect(res.statusCode).to.equal(200);
+      expect(response.data).to.be.a.object();
+      done();
+
+    });
+  });
+
+});

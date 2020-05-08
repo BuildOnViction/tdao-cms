@@ -1,0 +1,22 @@
+# This is a build configuration for Javascript (Node.js).
+# Check the guides at https://confluence.atlassian.com/x/14UWN for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+image: google/cloud-sdk:latest
+
+
+pipelines:
+  branches:
+    qa:
+      - step:
+          script:
+            - apt-get update && apt-get install sshpass
+            - chmod +x qa.sh
+            - sh qa.sh
+    master:
+      - step:
+          script:
+            - echo $PROD_GCLOUD_API_KEYFILE > ./gcloud-api-key.json
+            - gcloud auth activate-service-account --key-file gcloud-api-key.json
+            - gcloud config set project $PROD_GCLOUD_PROJECT
+            - gcloud -q app deploy master.yaml

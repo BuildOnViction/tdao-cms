@@ -1,0 +1,72 @@
+[
+  {
+    "name": "Việt Nam",
+    "id": "vi",
+    "phonecode": "84"
+  },
+  {
+    "name": "Trung Quốc",
+    "id": "zh",
+    "phonecode": "86"
+  },
+  {
+    "name": "Nhật Bản",
+    "id": "jp",
+    "phonecode": "81"
+  },
+  {
+    "name": "Hàn Quốc",
+    "id": "kr",
+    "phonecode": "82"
+  },
+  {
+    "name": "Ăng-gô-la",
+    "id": "ao",
+    "phonecode": "244"
+  },
+  {
+    "name": "Úc",
+    "id": "au",
+    "phonecode": "61"
+  },
+  {
+    "name": "Bê-la-rút",
+    "id": "by",
+    "phonecode": "375"
+  },
+  {
+    "name": "Bỉ",
+    "id": "be",
+    "phonecode": "32"
+  },
+  {
+    "name": "Bra-xin",
+    "id": "br",
+    "phonecode": "55"
+  },
+  {
+    "name": "Bru-nây",
+    "id": "bn",
+    "phonecode": "673"
+  },
+  {
+    "name": "Bulgaria",
+    "id": "bg",
+    "phonecode": "359"
+  },
+  {
+    "name": "Canada",
+    "id": "ca",
+    "phonecode": "1"
+  },
+  {
+    "name": "Pháp",
+    "id": "fr",
+    "phonecode": "33"
+  },
+  {
+    "name": "Hồng Kông",
+    "id": "hk",
+    "phonecode": "852"
+  }
+]

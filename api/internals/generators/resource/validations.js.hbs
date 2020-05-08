@@ -1,0 +1,39 @@
+'use strict';
+
+const Joi = require('joi');
+const Config = require('../../runtime/{{ camelCase name }}s');
+
+module.exports = {
+  find: {
+    query: {
+      limit: Joi.number().integer().min(0).default(Config.DEFAULT_LIMIT),
+      offset: Joi.number().integer().min(0).default(Config.DEFAULT_OFFSET)
+    }
+  },
+
+  findOne: {
+    params: {
+      id: Joi.string().required()
+    }
+  },
+
+  create: {
+    params: {
+      id: Joi.string().required()
+    },
+    payload: {}
+  },
+
+  edit: {
+    params: {
+      id: Joi.string().required()
+    },
+    payload: {}
+  },
+
+  destroy: {
+    params: {
+      id: Joi.string().required()
+    }
+  }
+};

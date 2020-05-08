@@ -1,0 +1,1 @@
+export const getPersonalACL = state => state.persist.acl;

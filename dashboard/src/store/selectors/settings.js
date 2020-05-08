@@ -1,0 +1,1 @@
+export const getSettingsConfigurations = state => state.persist.settings.configurations;

@@ -1,0 +1,13 @@
+service: report-v3
+runtime: nodejs
+env: flex
+manual_scaling:
+  instances: 2
+resources:
+  cpu: 2
+  memory_gb: 1
+  disk_size_gb: 10
+skip_files:
+  - ^(.*/)?.*/node_modules/.*$
+env_variables:
+  NODE_ENV: 'production'

@@ -1,0 +1,76 @@
+'use strict';
+
+const Validations = require('./{{ camelCase name }}s.validations');
+const Handlers = require('./{{ camelCase name }}s.handlers');
+const AuthServices = require('../../auth/auth.services');
+
+module.exports = {
+  find: {
+    validate: Validations.find,
+    pre: [
+      { method: '{{ camelCase name }}s.find(query)', assign: '{{ camelCase name }}s' }
+    ],
+    cors:{
+      origin: ['*']
+    },
+    auth: 'jwt',
+    handler: Handlers.find,
+    plugins: {
+      policies: ['httpResponse']
+    }
+  },
+
+  findOne: {
+    validate: Validations.findOne,
+    pre: [
+      { method: '{{ camelCase name }}s.findOne(params.id)', assign: '{{ camelCase name }}' }
+    ],
+    cors:{
+      origin: ['*']
+    },
+    handler: Handlers.findOne,
+    plugins: {
+      policies: ['httpResponse']
+    }
+  },
+
+  create: {
+    validate: Validations.create,
+    pre: [
+      { method: '{{ camelCase name }}s.create(payload)', assign: '{{ camelCase name }}' }
+    ],
+    cors:{
+      origin: ['*']
+    },
+    handler: Handlers.create,
+    plugins: {
+      policies: ['httpResponse']
+    }
+  },
+
+  edit: {
+    validate: Validations.edit,
+    pre: [
+      { method: '{{ camelCase name }}s.edit(params.id, payload)', assign: '{{ camelCase name }}' }
+    ],
+    cors:{
+      origin: ['*']
+    },
+    handler: Handlers.edit,
+    plugins: {
+      policies: ['httpResponse']
+    }
+  },
+
+  destroy: {
+    cors:{
+      origin: ['*']
+    },
+    validate: Validations.destroy,
+    pre: ['{{ camelCase name }}s.destroy(params.id)'],
+    handler: Handlers.destroy,
+    plugins: {
+      policies: ['httpResponse']
+    }
+  }
+};

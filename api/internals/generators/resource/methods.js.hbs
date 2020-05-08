@@ -1,0 +1,129 @@
+'use strict';
+
+const Chalk = require('chalk');
+const Boom = require('boom');
+const _ = require('lodash');
+const models = require('../models/');
+
+module.exports = (server, options) => [
+  {
+    name: '{{ camelCase name }}s.find',
+    method: find,
+    options: {
+      cache: server.plugins.runtime.cache.{{ camelCase name }}s.find.cache ? server.plugins.runtime.cache.{{ camelCase name }}s.find : undefined,
+      generateKey: (opts) => JSON.stringify(opts)
+    }
+  },
+  {
+    name: '{{ camelCase name }}s.findOne',
+    method: findOne,
+    options: {
+      cache: server.plugins.runtime.cache.{{ camelCase name }}s.findOne.cache ? server.plugins.runtime.cache.{{ camelCase name }}s.findOne : undefined,
+      generateKey: (opts) => JSON.stringify(opts)
+    }
+  },
+  {
+    name: '{{ camelCase name }}s.edit',
+    method: edit
+  },
+  {
+    name: '{{ camelCase name }}s.create',
+    method: create
+  },
+  {
+    name: '{{ camelCase name }}s.destroy',
+    method: destroy
+  }
+];
+
+const find = function find(query, next) {
+  models.{{ camelCase name }}s
+    .findAll({
+      limit: query.limit,
+      skip: query.offset,
+      attributes: {
+        exclude: ['hashedpassword']
+      }
+    })
+    .then(({{ camelCase name }}s) => {
+
+      return next(null, {{ camelCase name }}s);
+    })
+    .catch((exception)=>{
+      console.error(Chalk.bgRed.white(exception));
+      return next(Boom.badImplementation(exception));
+    })
+};
+
+const findOne = function findOne(id, next) {
+  models.{{ camelCase name }}s
+    .findOne({
+      where: {
+        id: id
+      },
+      attributes: {
+        exclude: ['hashedpassword']
+      }
+    })
+    .then(({{ camelCase name }}) => {
+
+      if (!{{ camelCase name }}) {
+        return next(Boom.notFound('{{pascalCase name}} not found'));
+      }
+      return next(null, {{ camelCase name }});
+    })
+    .catch((exception)=>{
+      console.error(Chalk.bgRed.white(exception));
+      return next(Boom.badImplementation(exception));
+    })
+};
+
+
+const create = function create(payload, next) {
+  return next(null, {});
+  this
+  .create(payload)
+  .then(({{ camelCase name }}) => {
+
+    return next(null, {{ camelCase name }});
+  })
+  .catch((exception)=>{
+    
+    return next(Boom.badImplementation(exception));
+  });
+};
+
+
+const edit = function edit(id, data, next) {
+  models.{{ camelCase name }}s
+  .update({
+    where: {
+      id: id
+    }
+  }, data)
+  .then(({{ camelCase name }}) => {
+    if (!{{ camelCase name }}.length) {
+      return next(Boom.notFound('{{pascalCase name}} not found'));
+    }
+    return next(null, _.head({{ camelCase name }}));
+  })
+  .catch((exception)=>{
+    
+    return next(Boom.badImplementation(exception));
+  })
+};
+
+const destroy = function destroy(id, next) {
+  models.{{ camelCase name }}s.destroy({
+    where: {
+      id: id
+    }
+  })
+  .then( (affectedRows) => {
+    return next(affectedRows);
+  })
+  .catch((exception)=>{
+    console.error(Chalk.bgRed.white(exception));
+    return next(Boom.badImplementation(exception));
+  });
+};

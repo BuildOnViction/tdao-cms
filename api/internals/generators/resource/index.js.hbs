@@ -1,0 +1,37 @@
+/**
+*
+* {{ camelCase name }} resource routing
+*
+*/
+
+'use strict';
+
+const Config = require('./{{ camelCase name }}s.config');
+
+module.exports = (server, options) => [
+  {
+    method: 'GET',
+    path: '/{{ camelCase name }}s',
+    config: Config.find
+  },
+  {
+    method: 'GET',
+    path: '/{{ camelCase name }}s/{id}',
+    config: Config.findOne
+  },
+  {
+    method: 'POST',
+    path: '/{{ camelCase name }}s',
+    config: Config.create
+  },
+  {
+    method: 'PUT',
+    path: '/{{ camelCase name }}s/{id}',
+    config: Config.edit
+  },
+  {
+    method: 'DELETE',
+    path: '/{{ camelCase name }}s/{id}',
+    config: Config.destroy
+  }
+];
