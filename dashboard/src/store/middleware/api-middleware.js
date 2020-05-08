@@ -45,7 +45,7 @@ const apiMiddleware = ({
     dispatch,
     getState
 }) => next => action => {
-    if (action.type !== API_REQUEST) {
+    if (!action || action.type !== API_REQUEST) {
         return next(action);
     }
 

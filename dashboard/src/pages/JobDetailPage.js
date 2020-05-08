@@ -15,9 +15,9 @@ import {
     UncontrolledAlert
 } from 'reactstrap';
 import connect from "react-redux/es/connect/connect";
-import { getDetailJobs, getDeleteJobs } from '../store/actions/jobs';
-// import { JsonEditor as Editor } from 'jsoneditor-react';
-// import 'jsoneditor-react/es/editor.min.css';
+import { getDetailJobs, relayJob } from '../store/actions/jobs';
+import { JsonEditor as Editor } from 'jsoneditor-react';
+import 'jsoneditor-react/es/editor.min.css';
 
 function getQueryVariable(variable) {
     var query = window.location.search.substring(1);
@@ -41,6 +41,11 @@ class JobsDetailPage extends React.Component {
         }
     }
 
+    submit = async () => {
+        let result = await this.props.relayJob(this.props.detail.SIGNATURE)
+        alert(JSON.stringify(result.payload))
+    }
+
     render() {
         let errMsg;
         if(this.props.error && this.props.error.errorMsg){
@@ -58,7 +63,7 @@ class JobsDetailPage extends React.Component {
                 </Alert>;
             }
         }
-        console.log("this.props.detail 11 ", this.props.detail)
+        console.log("this.props.detail 11 ", this.props)
             return (
                 <Page title="Job detail" breadcrumbs={[{ name: 'job detail', active: true }]}>
                     <Col md="12" sm="12" xs="12">
@@ -73,30 +78,24 @@ class JobsDetailPage extends React.Component {
                         <Col md={12} sm={12} xs={12} className="mb-12">
                             <Card className="flex-row">
                                 <CardBody>
-                                    {/* <Editor
-                                        value={this.props.detail.SIGNATURE}
-                                        onChange={this.handleChange}
-                                    /> */}
-                                    <CardTitle>{this.props.detail.title}</CardTitle>
+                                    
+                                    <CardTitle>{this.props.detail._id}</CardTitle>
+                                    
                                     <CardText>
-                                        <b>MÔ TẢ</b>: {this.props.detail.description}
-                                    </CardText>
-                                    <CardText>
-                                        <b>NƯỚC TUYỂN DỤNG:</b> {this.props.detail.country}
-                                    </CardText>
-                                    <CardText>
-                                        <b>NƠI NỘP HỒ SƠ:</b> {this.props.detail.cv_location}
-                                    </CardText>
-                                    <CardText>
-                                        <b>ĐIỀU KIỆN TUYỂN DỤNG:</b> {this.props.detail.required_condition}
-                                    </CardText>
-                                    <CardText>
-                                        <b>KINH NGHIỆM:</b> {this.props.experience}
-                                    </CardText>
-                                    <CardText>
-                                        <b>QUYỀN LỢI:</b> {this.props.detail.benefit}
+                                        <b>State </b>: {this.props.detail.state}
                                     </CardText>
 
+                                    <CardText>
+                                        <b>Error </b>: {this.props.detail.error}
+                                    </CardText>
+                                    <CardText>
+                                        <b>Task Name </b> {this.props.detail.task_name}
+                                    </CardText>
+                                    <Button color="success" type='button' onClick={this.submit}>Relay</Button>
+                                    <Editor
+                                        value={this.props.detail.SIGNATURE}
+                                        onChange={this.handleChange}
+                                    />
                                 </CardBody>
                             </Card>
                         </Col>
@@ -108,5 +107,6 @@ class JobsDetailPage extends React.Component {
 
 export default connect((state) => {
     return  {
+        detail: state.jobs.detail
     }
-}, {getDetailJobs,getDeleteJobs})(JobsDetailPage);
+}, {getDetailJobs,relayJob})(JobsDetailPage);

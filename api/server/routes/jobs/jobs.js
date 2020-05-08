@@ -40,6 +40,11 @@ module.exports = (server, options) => [
         config: Config.detail
     },
     {
+        method: 'POST',
+        path: '/jobs/relay/job',
+        config: Config.relay
+    },
+    {
         method: "GET",
         path: '/jobs/active/{id}',
         config: Config.active

@@ -11,6 +11,8 @@
     "d3-geo": "^1.10.0",
     "faker": "^4.1.0",
     "formik": "^1.5.7",
+    "jsoneditor": "^8.6.6",
+    "jsoneditor-react": "^3.0.0",
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",
     "query-string": "^6.5.0",

@@ -16,6 +16,9 @@ module.exports = {
     detail: (request) => {
         return request.pre.job;
     },
+    relay: (request) => {
+        return request.pre.job;
+    },
     search: (request) => {
         return request.pre.job;
     },

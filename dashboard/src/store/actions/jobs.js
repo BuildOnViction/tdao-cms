@@ -12,12 +12,12 @@ import {BASEURL} from "config/constant";
 import {API_REQUEST} from '../constants/actions';
 import {getBrokerJobs} from '../actions/broker'
 
-export const listJobs = (page = 1, limit = 50, from_node = "wallet") => ({
+export const listJobs = (page = 1, limit = 50, from_node = "wallet", status = "FAILURE") => ({
     type: API_REQUEST,
     payload: {
         url: BASEURL + 'api/v1/jobs',
         method: 'GET',
-        params: { page, limit, from_node},
+        params: { page, limit, from_node, status},
         success: res => {
             return jobListData(res.data);
         }
@@ -88,6 +88,21 @@ export const getUpdateJobs = (id, data) => ({
         data: data,
         success: res => {
             return getJobUpdateSuccess(res.data, id);
+        }
+    }
+});
+
+export const relayJob = (data) => ({
+    type: API_REQUEST,
+    payload: {
+        url: BASEURL + 'api/v1/jobs/relay/job',
+        method: 'POST',
+        data: data,
+        success: res => {
+            return ({
+                type: "API_FINISH",
+                payload: res.data
+            })
         }
     }
 });

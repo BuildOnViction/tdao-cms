@@ -27,7 +27,7 @@ class JobsPage extends React.Component {
         id: null,
         title: null,
         keywords:"",
-        status:""
+        status:"ALL"
     };
 
     toggle = () => {
@@ -43,18 +43,24 @@ class JobsPage extends React.Component {
 
     };
     handlePageClick(data){
-        this.props.listJobs(parseInt(data.selected) + 1, 100, this.state.status);
+        this.props.listJobs(parseInt(data.selected) + 1, 100, this.state.from_node, this.state.status);
     }
     search = (e) =>{
             this.setState({keywords:e.target.value});
             if(this.timeout) clearTimeout(this.timeout);
             this.timeout = setTimeout(() => {
-                this.props.listJobs(1, 100,this.state.status)
+                this.props.listJobs(1, 100,this.state.from_node, this.state.status)
             }, 1000);
     };
-    status = async (e) =>{
-        await this.setState({status:e.target.value});
-        await this.props.listJobs(1, 100 ,this.state.status);
+    // status = async (e) =>{
+    //     await this.setState({status:e.target.value});
+    //     await this.props.listJobs(1, 100 ,this.state.from_node, this.state.status);
+    // }
+    onChange = async (type, data) => {
+        let updatingData = {}
+        updatingData[type] = data
+        await this.setState(updatingData)
+        await this.props.listJobs(1, 100 ,this.state.from_node, this.state.status);
     }
     render() {
         let errMsg;
@@ -76,26 +82,24 @@ class JobsPage extends React.Component {
         let data;
 
         if (this.props.list) {
-            console.log(
-                this.state.status
-            )
             data = this.props.list.map((job, i) => {
                 let active_button;
-                // if(job.status === "draft"){
+                // if(job.from_node === "draft"){
                 //     active_button = <Button color="primary" onClick={() => {
                 //         this.props.getActiveJobs(job._id)
                 //     }}>Active</Button>
                 // }
 
                 return (<tr key={i}>
-                    <th scope="row">{job._id}</th>
+                    <td>{job._id}</td>
                     <td>{job.task_name}</td>
                     <td>{job.state}</td>
-                    <td>{job.SIGNATURE}</td>
+                    {/* <td>{JSON.stringify(job.SIGNATURE}</td> */}
                     <td>{job.created_at}</td>
+                    <td>{job.error}</td>
                     <td>
                         <ButtonGroup className="mr-3 mb-3">
-                            <Button color="info"><div className="button-detail"><Link to={"/jobs/" + job._id + "?from_node=" + this.state.status}>detail</Link></div></Button>
+                            <Button color="info"><div className="button-detail"><Link to={"/jobs/" + job._id + "?from_node=" + this.state.from_node}>detail</Link></div></Button>
                         </ButtonGroup>
                     </td>
                 </tr>)
@@ -137,13 +141,21 @@ class JobsPage extends React.Component {
                                             <Input className="mb-2" onChange={this.search} type="Search" placeholder="search" bsSize="md" />
                                         </Col>
                                         <Col xl={3} lg={3} md={3}>
-                                            <Input type="select" name="status" onChange={this.status}
+                                            <Input type="select" name="from_node" onChange={(e) => this.onChange("from_node", e.target.value)}
                                             >
                                                 <option value='wallet'>Wallet Node</option>
                                                 <option value='master'>Master Node</option>
                                                 <option value='verifier'>Verifier Node</option>
                                                 <option value='proxy'>Proxy Node</option>
                                                 <option value='api'>Api Node</option>
+                                            </Input>
+                                        </Col>
+                                        <Col xl={3} lg={3} md={3}>
+                                            <Input type="select" name="status" onChange={(e) => this.onChange("status", e.target.value)}
+                                            >
+                                                <option value='ALL'>All</option>
+                                                <option value='SUCCESS'>Success</option>
+                                                <option value='FAILURE'>Fail</option>
                                             </Input>
                                         </Col>
                                     </Row>
@@ -156,8 +168,9 @@ class JobsPage extends React.Component {
                                                         <th>#ID</th>
                                                         <th>Task Name</th>
                                                         <th>Status</th>
-                                                        <th>SIGNATURE</th>
+                                                        {/* <th>SIGNATURE</th> */}
                                                         <th>Created at</th>
+                                                        <th >Error</th>
                                                         <th> </th>
                                                     </tr>
                                                     </thead>

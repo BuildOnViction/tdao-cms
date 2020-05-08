@@ -9,6 +9,8 @@ var slugify = require('slugify');
 var Config = require('../config');
 const MongoModels = require('mongo-models');
 const Hoek = require('@hapi/hoek');
+const {PubSub}  = require('@google-cloud/pubsub');
+const Uuid = require('uuid');
 
 module.exports = (server, options) => [
     {
@@ -30,6 +32,10 @@ module.exports = (server, options) => [
     {
         name: 'jobs.jobDetail',
         method: jobDetail
+    },
+    {
+        name: 'jobs.relayJob',
+        method: relayJob
     },
     {
         name: 'jobs.jobSearch',
@@ -122,17 +128,23 @@ const jobDelete = async function (request, h) {
 };
 
 const getList = async function (request, h) {
-    console.log(request.query)
-    const {collection, client} = await getConnection(request.query.from_node)
-    
-    const filter = request.query.task_id ? {
-        task_id: {
-            '$regex': request.query.task_id,
-            '$options': 'i'
+    const { collection, client } = await getConnection(request.query.from_node)
+
+    let filter = {}
+
+    if (request.query.task_id) {
+        filter = {
+            task_id: request.query.task_id
         }
-    } : {
-        state: "FAILURE"
-    };
+    }
+
+    if (request.query.status !== "ALL") {
+        filter["state"] = request.query.status || "FAILURE"
+    } else {
+        filter["state"] = {
+            $ne: "PENDING"
+        }
+    }
 
     return new Promise((resolve, reject) => {
         collection
@@ -183,13 +195,13 @@ const getConnection = async function (env) {
     const db = client.db(dbName);
     const collection = db.collection('tasks');
 
-    return {collection, client}
+    return { collection, client }
 };
 
 const jobDetail = async function (request, h) {
-    const {collection, client} = await getConnection(request.query.from_node)
+    const { collection, client } = await getConnection(request.query.from_node)
 
-    const task = await collection.findOne({ _id: request.params.id})
+    const task = await collection.findOne({ _id: request.params.id })
     console.log("request.params.id ", request.params.id)
     client.close()
     return task
@@ -241,4 +253,26 @@ const jobSearch = async function (request, h) {
 const activejob = async function (request, h) {
     await Jobs.findOneAndUpdate({ _id: ObjectId(request.params.id), status: 'draft' }, { status: 'active' });
     return await Jobs.findOne({ _id: ObjectId(request.params.id) });
+}
+
+const relayJob = async function (request, h) {
+    let signature = request.payload
+    console.log(" signature ", signature)
+    const key = Uuid.v4();
+    signature.uuid = "task_" + key
+
+    // Instantiates a client
+    const pubsub = new PubSub({ projectId: Config.remotePubsub.projectId });
+    
+    // Creates the new topic
+    const dataBuffer = Buffer.from(JSON.stringify(signature));
+    const topic = pubsub.topic(Config.remotePubsub.topic)
+
+    const messageId = await topic.publish(dataBuffer);
+    
+    console.log(`Message ${messageId} published.`);
+    return {
+        uuid: signature.uuid,
+        messageId: messageId
+    }
 }

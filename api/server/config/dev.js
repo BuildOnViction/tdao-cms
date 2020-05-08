@@ -43,11 +43,16 @@ module.exports = {
         forIpAndUser: 4
     },
 
+    remotePubsub: {
+        projectId : 'xkld-197215',
+        topic: 'tomobridgedev'
+    },
+
     hapiMongoModels: {
         mongodb: {
             connection: {
-                uri: 'mongodb://localhost:27017/xkld-info',
-                db: 'xkld-info'
+                uri: 'mongodb://tomobridgejob:anhlavip@localhost:27017/tomobridgejob',
+                db: 'tomobridgejob'
             }
         },
         autoIndex: true

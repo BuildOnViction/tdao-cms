@@ -27,7 +27,7 @@ const pendingApiMiddleware = ({
     dispatch,
     getState
 }) => next => action => {
-    if (action.type !== 'PENDING_REQUEST_API') {
+    if (!action || action.type !== 'PENDING_REQUEST_API') {
         return next(action);
     }
 

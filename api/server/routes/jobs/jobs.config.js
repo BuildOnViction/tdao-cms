@@ -104,6 +104,26 @@ module.exports = {
             policies: ['httpResponse']
         }
     },
+    relay: {
+        tags: ['api', 'jobs'],
+        description: 'Detail jobs [Root Scope]',
+        notes: 'Detail jobs',
+        cors: {
+            origin: ['*']
+        },
+        auth: {
+            strategy: 'jwt',
+            scope: ['admin','editor'],
+        },
+        validate: Validations.relay,
+        pre: [
+            {method: (request, h) => request.server.methods.jobs.relayJob(request, h), assign: 'job'},
+        ],
+        handler: Handlers.relay,
+        plugins: {
+            policies: ['httpResponse']
+        }
+    },
     search: {
         tags: ['api', 'jobs'],
         description: 'Search jobs [Root Scope]',
