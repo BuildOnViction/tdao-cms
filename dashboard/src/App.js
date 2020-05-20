@@ -12,6 +12,7 @@ import { FREELY_ACCESS_PAGES } from 'config/constant';
 
 // pages
 import DashboardPage from 'pages/DashboardPage';
+import TransactionsPage from 'pages/TransactionsPage';
 import JobsPage from 'pages/JobsPage';
 import JobsDetailPage from 'pages/JobDetailPage';
 import JobsEditPage from 'pages/JobEditPage';
@@ -88,6 +89,12 @@ class App extends React.Component {
                   path="/jobs"
                   layout={MainLayout}
                   component={JobsPage}
+              />
+              <LayoutRoute
+                  exact
+                  path="/transactions"
+                  layout={MainLayout}
+                  component={TransactionsPage}
               />
               <LayoutRoute
                 exact

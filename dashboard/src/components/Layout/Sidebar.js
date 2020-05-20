@@ -31,6 +31,7 @@ const pageContents = [
 let navItems = [
   { to: '/', name: 'dashboard', exact: true, Icon: MdDashboard },
   { to: '/jobs', name: 'Jobs', exact: true, Icon: MdEventNote },
+  { to: '/transactions', name: 'Transactions', exact: true, Icon: MdEventNote },
   { to: '/admins', name: 'Admins', exact: true, Icon: MdAccountCircle },
   { to: '/users', name: 'Người dùng ', exact: true, Icon: MdAccountCircle }
 
@@ -101,15 +102,12 @@ class Sidebar extends React.Component {
           <Navbar>
             <SourceLink className="navbar-brand d-flex">
               <span className="text-white">
-                Bridge-CMS
+                Tomo Bridge CMS
               </span>
             </SourceLink>
           </Navbar>
           <Nav vertical>
-
-
               {sidebar}
-
             <Collapse isOpen={this.state.isOpenPages}>
               {pageContents.map(({ to, name, exact, Icon }, index) => (
                 <NavItem key={index} className={bem.e('nav-item')}>

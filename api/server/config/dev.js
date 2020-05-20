@@ -11,7 +11,7 @@ module.exports = {
         }
     },
     job_balance: {
-        register_default_balance:500000,
+        register_default_balance: 500000,
         jobs_default_balance: 20000
     },
     server: {
@@ -44,7 +44,7 @@ module.exports = {
     },
 
     remotePubsub: {
-        projectId : 'xkld-197215',
+        projectId: 'xkld-197215',
         topic: 'tomobridgedev'
     },
 
@@ -107,10 +107,54 @@ module.exports = {
     },
 
     apiPrefix: '/api/v1',
-    onepayDom:{
+    onepayDom: {
         paymentGateway: 'https://mtf.onepay.vn/onecomm-pay/vpc.op',
         merchant: 'ONEPAY',
         accessCode: 'D67342C2',
         secureSecret: 'A3EFDFABA8653DF2342E8DAC29B51AF0',
+    },
+    tasksUri: {
+        "wallet": {
+            uri: "mongodb://localhost:27017/gpcwalletlocal",
+            dbName: "gpcwalletlocal",
+        },
+        "proxy": {
+            uri: "mongodb://localhost:27017/gpcqueuejobs",
+            dbName: "gpcqueuejobs",
+        },
+        "master": {
+            uri: "mongodb://localhost:27017/gpcqueuejobs",
+            dbName: "gpcqueuejobs",
+        },
+        "verifier": {
+            uri: "mongodb://localhost:27017/gpcqueuejobs",
+            dbName: "gpcqueuejobs",
+        },
+        "api": {
+            uri: "mongodb://206.189.39.242:27017/",
+            dbName: "machinery_api",
+        },
+    },
+    transactionUri: {
+        "wallet": {
+            uri: "mongodb://localhost:27017/gpcwalletlocal",
+            dbName: "gpcwalletlocal",
+        },
+        "proxy": {
+            uri: "mongodb://localhost:27017/gpcqueuejobs",
+            dbName: "gpcqueuejobs",
+        },
+        "master": {
+            uri: "mongodb://localhost:27017/gpcqueuejobs",
+            dbName: "gpcqueuejobs",
+        },
+        "verifier": {
+            uri: "mongodb://localhost:27017/gpcqueuejobs",
+            dbName: "gpcqueuejobs",
+        },
+        "api": {
+            uri: "mongodb://mongodb:27017/tomobridgecms",
+            dbName: "tomobridgecms",
+        },
     }
 };

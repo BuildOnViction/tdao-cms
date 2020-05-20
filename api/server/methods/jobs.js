@@ -164,32 +164,31 @@ const getList = async function (request, h) {
 };
 
 const getConnection = async function (env) {
-    let uri = ""
-    let dbName = ""
-    switch (env) {
-        case "wallet":
-            uri = "mongodb://machinery_wallet:anhlavip@206.189.39.242:27017/machinery_wallet"
-            dbName = "machinery_wallet"
-            break;
-        case "proxy":
-            uri = "mongodb://machinery_proxy:anhlavip@206.189.39.242:27017/machinery_proxy"
-            dbName = "machinery_proxy"
-            break;
-        case "master":
-            uri = "mongodb://machinery_job:anhlavip@206.189.39.242:27017/machinery_job"
-            dbName = "machinery_job"
-            break;
-        case "verifier":
-            uri = "mongodb://machinery_job1:anhlavip@206.189.39.242:27017/machinery_job1"
-            dbName = "machinery_job1"
-            break;
-        case "api":
-            uri = "mongodb://machinery_api:anhlavip@206.189.39.242:27017/machinery_api"
-            dbName = "machinery_api"
-            break;
-        default:
-            break;
-    }
+    const {uri, dbName} = Config.tasksUri[env]
+    // switch (env) {
+    //     case "wallet":
+    //         uri = "mongodb://machinery_wallet:anhlavip@206.189.39.242:27017/machinery_wallet"
+    //         dbName = "machinery_wallet"
+    //         break;
+    //     case "proxy":
+    //         uri = "mongodb://machinery_proxy:anhlavip@206.189.39.242:27017/machinery_proxy"
+    //         dbName = "machinery_proxy"
+    //         break;
+    //     case "master":
+    //         uri = "mongodb://machinery_job:anhlavip@206.189.39.242:27017/machinery_job"
+    //         dbName = "machinery_job"
+    //         break;
+    //     case "verifier":
+    //         uri = "mongodb://machinery_job1:anhlavip@206.189.39.242:27017/machinery_job1"
+    //         dbName = "machinery_job1"
+    //         break;
+    //     case "api":
+    //         uri = "mongodb://machinery_api:anhlavip@206.189.39.242:27017/machinery_api"
+    //         dbName = "machinery_api"
+    //         break;
+    //     default:
+    //         break;
+    // }
 
     const client = await MongoClient.connect(uri, {});
     const db = client.db(dbName);

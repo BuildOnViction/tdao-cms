@@ -6,12 +6,12 @@
 
 'use strict';
 
-const Config = require('./jobTypes.config');
+const Config = require('./transactions.config');
 
 module.exports = (server, options) => [
     {
         method: 'GET',
-        path: '/jobTypes',
+        path: '/transactions',
         config: Config.get
     }
 ];

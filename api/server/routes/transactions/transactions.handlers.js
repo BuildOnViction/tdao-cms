@@ -2,6 +2,6 @@
 
 module.exports = {
     getList: (request) => {
-        return request.pre.jobTypes;
+        return request.pre.transactions;
     }
 };

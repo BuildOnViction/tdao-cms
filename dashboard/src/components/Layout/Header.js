@@ -22,13 +22,8 @@ import {
 import {logout} from '../../store/actions/auth';
 import { UserCard } from 'components/Card';
 import SearchInput from 'components/SearchInput';
-
-
 import connect from "react-redux/es/connect/connect";
-
 const bem = bn.create('header');
-
-
 
 class Header extends React.Component {
   state = {
@@ -69,10 +64,6 @@ class Header extends React.Component {
             <MdClearAll size={25} />
           </Button>
         </Nav>
-        <Nav navbar>
-          <SearchInput />
-        </Nav>
-
         <Nav navbar className={bem.e('nav-right')}>
           <NavItem>
             <NavLink id="Popover2">

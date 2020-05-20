@@ -10,7 +10,7 @@ const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 const Schema = mongoose.Schema;
 
-const jobTypeSchema = new Schema({
+const transactionSchema = new Schema({
         name: String,
         slug: String,
     },
@@ -21,7 +21,7 @@ const jobTypeSchema = new Schema({
     }
 );
 
-jobTypeSchema.plugin(mongoosePaginate);
+transactionSchema.plugin(mongoosePaginate);
 
-module.exports = mongoose.model('job-types', jobTypeSchema);
+module.exports = mongoose.model('transactions', transactionSchema);
 
