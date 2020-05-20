@@ -71,8 +71,7 @@ class TransactionsPage extends React.Component {
                     <td style={{wordWrap: "break-word", maxWidth: "250px"}}>{job.outtx.hash}</td>
                     <td>{job.intx.to}</td>
                     <td>{job.outtx.to}</td>
-                    <td>{job.intx.status}</td>
-                    <td>{job.outtx.status}</td>
+                    <td>{job.intx.amount}</td>
                 </tr>)
             })
         }
@@ -123,8 +122,9 @@ class TransactionsPage extends React.Component {
                                                         <th style={{wordWrap: "break-word", maxWidth: "200px"}}>Out Tx hash</th>
                                                         <th >In receiver</th>
                                                         <th >Out receiver</th>
-                                                        <th >In status</th>
-                                                        <th >Out status</th>
+                                                        <th >Amount</th>
+                                                        {/* <th >In status</th> */}
+                                                        {/* <th >Out status</th> */}
                                                     </tr>
                                                     </thead>
                                                     <tbody>
