@@ -33,10 +33,6 @@ let navItems = [
   { to: '/jobs', name: 'Jobs', exact: true, Icon: MdEventNote },
   { to: '/transactions', name: 'Transactions', exact: true, Icon: MdEventNote },
   { to: '/admins', name: 'Admins', exact: true, Icon: MdAccountCircle },
-  { to: '/users', name: 'Người dùng ', exact: true, Icon: MdAccountCircle }
-
-
-
 ];
 
 const bem = bn.create('sidebar');

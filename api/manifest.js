@@ -76,10 +76,8 @@ const manifest = {
                     models: [
                         Path.resolve(__dirname, './server/models/auth-attempt'),
                         Path.resolve(__dirname, './server/models/user'),
-                        Path.resolve(__dirname, './server/models/broker'),
                         Path.resolve(__dirname, './server/models/token'),
                         Path.resolve(__dirname, './server/models/verification-phone-code'),
-                        Path.resolve(__dirname, './server/models/labor'),
                         Path.resolve(__dirname, './server/models/job')
                     ],
                     autoIndex: Config.hapiMongoModels.autoIndex

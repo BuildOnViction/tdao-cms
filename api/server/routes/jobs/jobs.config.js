@@ -13,7 +13,7 @@ module.exports = {
         },
         auth: {
             strategy: 'jwt',
-            scope: ['admin','editor'],
+            scope: ['admin'],
         },
         validate: Validations.create,
         pre: [
@@ -33,7 +33,7 @@ module.exports = {
         },
         auth: {
             strategy: 'jwt',
-            scope: ['admin','editor'],
+            scope: ['admin'],
         },
         validate: Validations.update,
         pre: [
@@ -53,7 +53,7 @@ module.exports = {
         },
         auth: {
             strategy: 'jwt',
-            scope: ['admin','editor'],
+            scope: ['admin'],
         },
         validate: Validations.delete,
         pre: [
@@ -73,7 +73,7 @@ module.exports = {
         },
         auth: {
             strategy: 'jwt',
-            scope: ['admin','editor'],
+            scope: ['admin'],
         },
         validate: Validations.getList,
         pre: [
@@ -93,7 +93,7 @@ module.exports = {
         },
         auth: {
             strategy: 'jwt',
-            scope: ['admin','editor'],
+            scope: ['admin'],
         },
         validate: Validations.detail,
         pre: [
@@ -113,7 +113,7 @@ module.exports = {
         },
         auth: {
             strategy: 'jwt',
-            scope: ['admin','editor'],
+            scope: ['admin'],
         },
         validate: Validations.relay,
         pre: [
@@ -133,7 +133,7 @@ module.exports = {
         },
         auth: {
             strategy: 'jwt',
-            scope: ['admin','editor'],
+            scope: ['admin'],
         },
         validate: Validations.search,
         pre: [

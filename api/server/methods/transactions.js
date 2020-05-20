@@ -11,11 +11,57 @@ module.exports = (server, options) => [
 
 const getListTransactions = async function (request, h) {
     const { collection, client } = await getTransactionConnection("api")
+    let filter = {}
+    let $and = []
+    if (request.query.from_address) {
+        $and.push({
+            "$or": [
+                {
+                    "intx.from": request.query.from_address
+                },
+                {
+                    "outtx.to": request.query.from_address
+                }
+            ]
+        })
+    }
 
-    const transactions = await collection.find({}).sort({$natural:1}).limit(100);
+    if (request.query.coin_type && request.query.coin_type !== "ALL") {
+        filter["intx.cointype"] = request.query.coin_type
+    }
 
-    client.close()
-    return transactions
+    if (request.query.hash) {
+        $and.push({
+            "$or": [
+                {
+                    "intx.hash": new RegExp(["^", request.query.hash, "$"].join(""), "i")
+                },
+                {
+                    "outtx.hash": new RegExp(["^", request.query.hash, "$"].join(""), "i")
+                }
+            ]
+        })
+        
+    }
+    if ($and.length > 0) {
+        filter["$and"] = $and
+    }
+        
+    return new Promise((resolve, reject) => {
+        collection
+            .find(filter)
+            .sort({ $natural: -1 })
+            .skip((request.query.page - 1) * request.query.limit)
+            .limit(request.query.limit)
+            .toArray(function (err, result) {
+                client.close();
+                if (err) {
+                    return reject(err)
+                }
+
+                resolve(result)
+            })
+    });
 }
 
 

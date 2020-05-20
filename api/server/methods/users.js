@@ -2,8 +2,6 @@
 
 const Boom = require('boom');
 const User = require('../models/user');
-const Broker = require('../models/broker');
-const Labor = require('../models/labor');
 const VerifyPhoneCode = require('../models/verification-phone-code');
 const AuthAttempt = require('../models/auth-attempt');
 const { sendOTP } = require('../sms');
@@ -22,25 +20,9 @@ module.exports = (server, options) => [
         }
     },
     {
-        name: 'users.findOne',
-        method: findOne,
-        options: {
-            //   cache: server.plugins.runtime.cache.users.findOne.cache ? server.plugins.runtime.cache.users.findOne : undefined,
-            generateKey: (opts) => JSON.stringify(opts)
-        }
-    },
-    {
         name: 'users.edit',
         method: edit
     },
-    {
-        name: 'users.createBrokerAccount',
-        method: createBrokerAccount
-    },
-    // {
-    //     name: 'users.createLaborAccount',
-    //     method: createLaborAccount
-    // },
     {
         name: 'users.destroy',
         method: destroy
@@ -65,10 +47,6 @@ module.exports = (server, options) => [
         name: 'users.findByCredentials',
         method: findByCredentials
     },
-    // {
-    //     name: 'users.generateSession',
-    //     method: generateSession
-    // },
     {
         name: 'users.updatePassword',
         method: updatePassword
@@ -141,64 +119,6 @@ const __verifyPhoneOTP = async (phone, verify_code) => {
     }
 
     VerifyPhoneCode.deleteOne({ ...verificationCode });
-}
-
-const createBrokerAccount = async function (payload, h) {
-    await __verifyPhoneOTP(payload.phone, payload.verify_code)
-    const { name, dob, company } = payload;
-    const balance = Config.job_balance.register_default_balance;
-    const broker = await Broker.create({
-        name, dob, company, balance
-    });
-    return await User.createUser({
-        ...payload,
-        roles: {
-            broker: {
-                id: broker._id.toString(),
-                name: name
-            }
-        }
-    });
-}
-
-const createLaborAccount = async function (payload, h) {
-    __verifyPhoneOTP(payload.phone, payload.verify_code)
-    const { name, dob, company } = payload;
-    const labor = await Labor.create(payload);
-
-    return await User.createUser({
-        ...payload,
-        roles: {
-            labor: {
-                id: labor._id,
-                name: name
-            }
-        }
-    });
-}
-
-const findOne = async function (request, h) {
-    let user_data;
-    const user = await User.findById(request.params.id).select('-password');
-    if (user) {
-        let role = Object.keys(user.roles);
-        if (role == 'labor') {
-            user_data = await Labor.findOne({_id: ObjectId(user.roles.labor.id)});
-        } else if (role == 'broker') {
-            user_data = await Broker.findOne({_id: ObjectId(user.roles.broker.id)});
-        } else {
-            throw Boom.notFound('Không tìm thấy tài khoản')
-        }
-
-    }
-
-    if (!user) {
-        throw Boom.notFound('User not found.');
-    }
-
-    let result = {...user.toObject(), users: user_data};
-
-    return result;
 }
 
 const edit = async function (request, h) {

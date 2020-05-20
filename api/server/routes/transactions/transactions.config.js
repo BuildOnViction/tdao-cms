@@ -11,10 +11,14 @@ module.exports = {
         cors: {
             origin: ['*']
         },
-        auth: false,
+        auth: {
+            strategy: 'jwt',
+            scope: ['admin','editor'],
+        },
         pre: [
             {method: (request, h) => request.server.methods.transactions.getList(request, h), assign: 'transactions'},
         ],
+        validate: Validations.getList,
         handler: Handlers.getList,
         plugins: {
             policies: ['httpResponse']

@@ -143,9 +143,9 @@ class JobsPage extends React.Component {
                                         <Col xl={3} lg={3} md={3}>
                                             <Input type="select" name="from_node" onChange={(e) => this.onChange("from_node", e.target.value)}
                                             >
-                                                <option value='wallet'>Wallet Node</option>
                                                 <option value='master'>Master Node</option>
                                                 <option value='verifier'>Verifier Node</option>
+                                                <option value='wallet'>Wallet Node</option>
                                                 <option value='proxy'>Proxy Node</option>
                                                 <option value='api'>Api Node</option>
                                             </Input>

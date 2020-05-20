@@ -16,89 +16,100 @@ import {listTransactions} from '../store/actions/transactions';
 import { history } from "App.js";
 
 class TransactionsPage extends React.Component {
-
     constructor(props) {
         super(props);
-        this.timeout =  0;
+    }
+
+    state = {
+        page: 1,
+        limit: 100,
+        coin_type: "ALL",
+        hash: "",
+        data: []
+    };
+
+    requestTransactions() {
+        this.props.listTransactions(this.state.page, this.state.limit, this.state.coin_type, this.state.hash).then((data) => {
+            this.setState({
+                data: data.payload
+            })
+        }).catch((err) => {
+            alert(JSON.stringify(err))
+        })
     }
     componentDidMount() {
-        this.props.listTransactions(1, 100).then((data) => {
-            console.log(data)
-        }).catch((err) => {
-            console.log(err)
-        })
+        this.requestTransactions()
+    }
+
+    handlePageClick(data){
+        this.setState({page:parseInt(data.selected) + 1});
+        this.requestTransactions();
+    }
+
+    search = (e) =>{
+        this.setState({hash:e.target.value});
+        this.requestTransactions()
+    };
+
+    onChange = async (type, data) => {
+        let updatingData = {}
+        updatingData[type] = data
+        await this.setState(updatingData)
+        this.requestTransactions()
     }
 
     render() {
-        let errMsg;
-        if(this.props.error && this.props.error.errorMsg){
-            errMsg = <UncontrolledAlert color="danger">
-                {this.props.error.errorMsg}
-            </UncontrolledAlert>
-        }
-        let alert = null;
-        if(this.props.location.search){
-            let parsed = queryString.parse(this.props.location.search);
-
-            if(parsed.success){
-                alert = <Alert color="success">
-                    Tạo thành công
-                </Alert>;
-            }
-        }
         let data;
-
-        // if (this.props.list) {
-        //     data = this.props.list.map((job, i) => {
-        //         return (<tr key={i}>
-        //             <td>{job._id}</td>
-        //             <td>{job.task_name}</td>
-        //             <td>{job.state}</td>
-        //             {/* <td>{JSON.stringify(job.SIGNATURE}</td> */}
-        //             <td>{job.created_at}</td>
-        //             <td>{job.error}</td>
-        //             <td>
-        //                 <ButtonGroup className="mr-3 mb-3">
-        //                     <Button color="info"><div className="button-detail"><Link to={"/jobs/" + job._id + "?coin_type=" + this.state.coin_type}>detail</Link></div></Button>
-        //                 </ButtonGroup>
-        //             </td>
-        //         </tr>)
-        //     })
-        // }
+        console.log("this.state.data ", this.state.data)
+        if (this.state.data) {
+            data = this.state.data.map((job, i) => {
+                let time = new Date(job.createdAt* 1000)
+                return (<tr key={i}>
+                    <td>{time.toString()}</td>
+                    <td>{job.intx.cointype}</td>
+                    <td style={{wordWrap: "break-word", maxWidth: "250px"}}>{job.intx.hash}</td>
+                    <td style={{wordWrap: "break-word", maxWidth: "250px"}}>{job.outtx.hash}</td>
+                    <td>{job.intx.to}</td>
+                    <td>{job.outtx.to}</td>
+                    <td>{job.intx.status}</td>
+                    <td>{job.outtx.status}</td>
+                </tr>)
+            })
+        }
         return (
             <Page
                 title="Transactions"
                 breadcrumbs={[{ name: 'jobs', active: true }]}
-                className="TablePage"
+                className=""
             >
-                {/* <Link to={"/jobs/create"}><Button color='success'>Tạo đơn hàng</Button></Link> */}
-                {alert}
-                {errMsg}
                 <Row>
                     <Col>
                         <Card className="mb-3">
                             <CardBody>
                                     <Row>
                                         <Col xl={7} lg={7} md={7}>
-                                            <Input className="mb-2" onChange={this.search} type="Search" placeholder="search" bsSize="md" />
+                                            <Input className="mb-2" onChange={(e) => this.onChange("hash", e.target.value)} type="Search" placeholder="search" bsSize="md" />
                                         </Col>
                                         <Col xl={3} lg={3} md={3}>
                                             <Input type="select" name="coin_type" onChange={(e) => this.onChange("coin_type", e.target.value)}
                                             >
                                                 <option value='ALL'>ALL</option>
-                                                <option value='BTC'>BTC</option>
-                                                <option value='ETH'>ETH</option>
-                                                <option value='USDT'>USDT</option>
+                                                <option value='BTC'>Mint BTC</option>
+                                                <option value='ETH'>Mint ETH</option>
+                                                <option value='USDT'>Mint USDT</option>
+                                                <option value='TOMOBTC'>Burn BTC</option>
+                                                <option value='TOMOETH'>Burn ETH</option>
+                                                <option value='TOMOUSDT'>Burn USDT</option>
                                             </Input>
                                         </Col>
-                                        <Col xl={3} lg={3} md={3}>
+                                        {/* <Col xl={3} lg={3} md={3}>
                                             <Input type="select" name="status" onChange={(e) => this.onChange("status", e.target.value)}
                                             >
                                                 <option value='ALL'>All</option>
                                                 <option value='SUCCESS'>Success</option>
                                                 <option value='FAILURE'>Fail</option>
                                             </Input>
-                                        </Col>
+                                        </Col> */}
                                     </Row>
                                     <Row>
                                         <Col>
@@ -106,13 +117,14 @@ class TransactionsPage extends React.Component {
                                                 <Table>
                                                     <thead>
                                                     <tr>
-                                                        <th>#ID</th>
-                                                        <th>Task Name</th>
-                                                        <th>Status</th>
-                                                        {/* <th>SIGNATURE</th> */}
-                                                        <th>Created at</th>
-                                                        <th >Error</th>
-                                                        <th> </th>
+                                                        <th> Timestamp </th>
+                                                        <th>Coin type</th>
+                                                        <th style={{wordWrap: "break-word", maxWidth: "200px"}}>In Tx hash</th>
+                                                        <th style={{wordWrap: "break-word", maxWidth: "200px"}}>Out Tx hash</th>
+                                                        <th >In receiver</th>
+                                                        <th >Out receiver</th>
+                                                        <th >In status</th>
+                                                        <th >Out status</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>

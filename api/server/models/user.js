@@ -1,6 +1,4 @@
 'use strict';
-const Broker = require('./broker');
-const Labor = require('./labor');
 const Admin = require('./admin');
 const Assert = require('assert');
 const Bcrypt = require('bcryptjs');
@@ -145,15 +143,15 @@ UserSchema.methods.hydrateRole = async function () {
     }
     this._role = {};
     // multiple roles - wont use right now - just single role
-    if (this.roles.broker) {
-        let broker = await Broker.findById(this.roles.broker.id);
-        this._role = {...broker.toObject()};
-        this._role.type = 'broker';
-    } else if (this.roles.labor) {
-        let labor = await Labor.findById(this.roles.labor.id);
-        this._role = {...labor.toObject()};
-        this._role.type = 'labor';
-    }
+    // if (this.roles.broker) {
+    //     let broker = await Broker.findById(this.roles.broker.id);
+    //     this._role = {...broker.toObject()};
+    //     this._role.type = 'broker';
+    // } else if (this.roles.labor) {
+    //     let labor = await Labor.findById(this.roles.labor.id);
+    //     this._role = {...labor.toObject()};
+    //     this._role.type = 'labor';
+    // }
     return this._role;
 }
 

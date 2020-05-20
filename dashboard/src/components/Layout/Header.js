@@ -55,6 +55,13 @@ class Header extends React.Component {
     document.querySelector('.cr-sidebar').classList.toggle('cr-sidebar--open');
   };
 
+  componentDidMount() {
+    setTimeout(() => {
+      document.querySelector('.cr-sidebar').classList.toggle('cr-sidebar--open');
+    }, 500)
+    
+  }
+
   render() {
 
     return (
@@ -67,7 +74,6 @@ class Header extends React.Component {
         <Nav navbar className={bem.e('nav-right')}>
           <NavItem>
             <NavLink id="Popover2">
-
               <div onClick={this.toggleUserCardPopover}>
                   {this.props.admin.name}
               </div>

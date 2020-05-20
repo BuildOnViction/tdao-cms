@@ -153,8 +153,8 @@ module.exports = {
             dbName: "gpcqueuejobs",
         },
         "api": {
-            uri: "mongodb://mongodb:27017/tomobridgecms",
-            dbName: "tomobridgecms",
+            uri: "mongodb://tomobridge:anhlavip@206.189.39.242:27017/tomobridge",
+            dbName: "tomobridge",
         },
     }
 };
