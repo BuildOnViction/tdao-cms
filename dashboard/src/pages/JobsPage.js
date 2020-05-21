@@ -19,15 +19,31 @@ class JobsPage extends React.Component {
 
     constructor(props) {
         super(props);
-        this.props.listJobs(1,100);
         this.timeout =  0;
     }
+    
+    loadJobs = async (page, limit, fromNode, status) => {
+        try {
+            let jobs = await this.props.listJobs(page, limit, fromNode, status);
+            this.setState({
+                jobs: jobs
+            })
+        } catch (err){
+            alert(JSON.stringify(err))
+        }
+    }
+
+    componentDidMount(){
+        this.loadJobs(1, 100)
+    }
+
     state = {
         modal: false,
         id: null,
         title: null,
         keywords:"",
-        status:"ALL"
+        status:"ALL",
+        jobs: [],
     };
 
     toggle = () => {
@@ -40,56 +56,32 @@ class JobsPage extends React.Component {
         this.props.getDeleteJobs(id);
         this.toggle();
         history.push('/jobs');
-
     };
     handlePageClick(data){
-        this.props.listJobs(parseInt(data.selected) + 1, 100, this.state.from_node, this.state.status);
+        this.loadJobs(parseInt(data.selected) + 1, 100, this.state.from_node, this.state.status);
     }
     search = (e) =>{
             this.setState({keywords:e.target.value});
             if(this.timeout) clearTimeout(this.timeout);
             this.timeout = setTimeout(() => {
-                this.props.listJobs(1, 100,this.state.from_node, this.state.status)
+                this.loadJobs(1, 100,this.state.from_node, this.state.status)
             }, 1000);
     };
     // status = async (e) =>{
     //     await this.setState({status:e.target.value});
-    //     await this.props.listJobs(1, 100 ,this.state.from_node, this.state.status);
+    //     await this.loadJobs(1, 100 ,this.state.from_node, this.state.status);
     // }
     onChange = async (type, data) => {
         let updatingData = {}
         updatingData[type] = data
         await this.setState(updatingData)
-        await this.props.listJobs(1, 100 ,this.state.from_node, this.state.status);
+        await this.loadJobs(1, 100 ,this.state.from_node, this.state.status);
     }
     render() {
-        let errMsg;
-        if(this.props.error && this.props.error.errorMsg){
-            errMsg = <UncontrolledAlert color="danger">
-                {this.props.error.errorMsg}
-            </UncontrolledAlert>
-        }
-        let alert = null;
-        if(this.props.location.search){
-            let parsed = queryString.parse(this.props.location.search);
-
-            if(parsed.success){
-                alert = <Alert color="success">
-                    Tạo thành công
-                </Alert>;
-            }
-        }
-        let data;
-
-        if (this.props.list) {
-            data = this.props.list.map((job, i) => {
+        let data
+        if (this.state.jobs) {
+            data = this.state.jobs.map((job, i) => {
                 let active_button;
-                // if(job.from_node === "draft"){
-                //     active_button = <Button color="primary" onClick={() => {
-                //         this.props.getActiveJobs(job._id)
-                //     }}>Active</Button>
-                // }
-
                 return (<tr key={i}>
                     <td>{job._id}</td>
                     <td>{job.task_name}</td>
@@ -111,9 +103,6 @@ class JobsPage extends React.Component {
                 breadcrumbs={[{ name: 'jobs', active: true }]}
                 className="TablePage"
             >
-                {/* <Link to={"/jobs/create"}><Button color='success'>Tạo đơn hàng</Button></Link> */}
-                {alert}
-                {errMsg}
                 <Row>
                     <Col>
                         <Card className="mb-3">
@@ -191,18 +180,4 @@ class JobsPage extends React.Component {
     }
 }
 
-export default connect((state) => {
-    return {
-        totalDocs: state.jobs.list.totalDocs,
-        limit: state.jobs.list.limit,
-        hasPrevPage: state.jobs.list.hasPrevPage,
-        hasNextPage: state.jobs.list.hasNextPage,
-        page: state.jobs.list.page,
-        totalPages: state.jobs.list.totalPages,
-        pagingCounter: state.jobs.list.pagingCounter,
-        prevPage: state.jobs.list.prevPage,
-        nextPage: state.jobs.list.nextPage,
-        list: state.jobs.list,
-        error: state.common.requests.error,
-    }
-}, {listJobs,getDeleteJobs,getSearchJobs,getActiveJobs})(JobsPage);
+export default connect(null, {listJobs,getDeleteJobs,getSearchJobs,getActiveJobs})(JobsPage);

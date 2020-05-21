@@ -19,7 +19,10 @@ export const listJobs = (page = 1, limit = 50, from_node = "wallet", status = "F
         method: 'GET',
         params: { page, limit, from_node, status},
         success: res => {
-            return jobListData(res.data);
+            return ({
+                type: "API_FINISH",
+                payload: res.data
+            })
         }
     }
 });
