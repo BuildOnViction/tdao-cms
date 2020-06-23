@@ -35,15 +35,43 @@ class JobsDetailPage extends React.Component {
 
     constructor(props) {
         super(props);
+    }
 
-        if(this.props.match.params.id){
-            this.props.getDetailJobs(this.props.match.params.id, getQueryVariable("from_node"));
+    componentDidMount() {
+        this.loadJobDetail()
+    }
+
+    state = {
+        job: {
         }
     }
 
-    submit = async () => {
-        let result = await this.props.relayJob(this.props.detail.SIGNATURE)
+    loadJobDetail = async() => {
+        if(this.props.match.params.id){
+            let job = await this.props.getDetailJobs(this.props.match.params.id, getQueryVariable("from_node"));
+            console.log(job.payload)
+            this.setState({
+                job: job.payload || {}
+            })
+        }
+    }
+
+    relay = async () => {
+        let result = await this.props.relayJob(this.state.job.SIGNATURE)
         alert(JSON.stringify(result.payload))
+    }
+
+    delete = async () => {
+        let result = await this.props.relayJob(this.state.job.SIGNATURE)
+        alert(JSON.stringify(result.payload))
+    }
+
+    handleChange = (value) => {
+        console.log(value)
+        this.state.job.SIGNATURE = value
+        this.setState({
+            job: this.state.job
+        })
     }
 
     render() {
@@ -63,7 +91,6 @@ class JobsDetailPage extends React.Component {
                 </Alert>;
             }
         }
-        console.log("this.props.detail 11 ", this.props)
             return (
                 <Page title="Job detail" breadcrumbs={[{ name: 'job detail', active: true }]}>
                     <Col md="12" sm="12" xs="12">
@@ -79,23 +106,27 @@ class JobsDetailPage extends React.Component {
                             <Card className="flex-row">
                                 <CardBody>
                                     
-                                    <CardTitle>{this.props.detail._id}</CardTitle>
+                                    <CardTitle>{this.state.job._id}</CardTitle>
                                     
                                     <CardText>
-                                        <b>State </b>: {this.props.detail.state}
+                                        <b>State </b>: {this.state.job.state}
                                     </CardText>
 
                                     <CardText>
-                                        <b>Error </b>: {this.props.detail.error}
+                                        <b>Error </b>: {this.state.job.error}
                                     </CardText>
                                     <CardText>
-                                        <b>Task Name </b> {this.props.detail.task_name}
+                                        <b>Task Name </b> {this.state.job.task_name}
                                     </CardText>
-                                    <Button color="success" type='button' onClick={this.submit}>Relay</Button>
-                                    <Editor
-                                        value={this.props.detail.SIGNATURE}
-                                        onChange={this.handleChange}
-                                    />
+                                    <Button color="success" type='button' onClick={this.relay}>Relay</Button>
+                                    <Button color="danger" type='button' onClick={this.delete}>Delete</Button>
+                                    { this.state.job.SIGNATURE ? 
+                                        <Editor
+                                            value={this.state.job.SIGNATURE}
+                                            onChange={this.handleChange}
+                                        /> : ""
+                                    }
+                                    
                                 </CardBody>
                             </Card>
                         </Col>

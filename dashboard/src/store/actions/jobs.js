@@ -32,7 +32,10 @@ export const getDetailJobs = (id, fromNode) => ({
         url: BASEURL + 'api/v1/jobs/' + id + "?from_node=" + fromNode,
         method: 'GET',
         success: res => {
-            return getJobDetailData(res.data);
+            return ({
+                type: "API_FINISH",
+                payload: res.data
+            })
         }
     }
 });

@@ -26,7 +26,8 @@ class JobsPage extends React.Component {
         try {
             let jobs = await this.props.listJobs(page, limit, fromNode, status);
             this.setState({
-                jobs: jobs
+                jobs: jobs.payload
+
             })
         } catch (err){
             alert(JSON.stringify(err))
@@ -34,13 +35,14 @@ class JobsPage extends React.Component {
     }
 
     componentDidMount(){
-        this.loadJobs(1, 100)
+        this.loadJobs(1, 100, this.state.from_node,  this.state.status)
     }
 
     state = {
         modal: false,
         id: null,
         title: null,
+        from_node: "master",
         keywords:"",
         status:"ALL",
         jobs: [],
@@ -79,7 +81,7 @@ class JobsPage extends React.Component {
     }
     render() {
         let data
-        if (this.state.jobs) {
+        if (this.state.jobs && this.state.jobs.length > 0) {
             data = this.state.jobs.map((job, i) => {
                 let active_button;
                 return (<tr key={i}>
