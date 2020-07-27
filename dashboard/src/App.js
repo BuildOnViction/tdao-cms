@@ -14,6 +14,7 @@ import { FREELY_ACCESS_PAGES } from 'config/constant';
 import DashboardPage from 'pages/DashboardPage';
 import TransactionsPage from 'pages/TransactionsPage';
 import JobsPage from 'pages/JobsPage';
+import AddressesPage from 'pages/AddressesPage';
 import JobsDetailPage from 'pages/JobDetailPage';
 import JobsCreatePage from 'pages/JobCreatePage';
 //admins
@@ -86,6 +87,12 @@ class App extends React.Component {
                   path="/jobs"
                   layout={MainLayout}
                   component={JobsPage}
+              />
+              <LayoutRoute
+                  exact
+                  path="/addresses"
+                  layout={MainLayout}
+                  component={AddressesPage}
               />
               <LayoutRoute
                   exact

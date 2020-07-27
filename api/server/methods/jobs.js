@@ -10,10 +10,10 @@ const {PubSub}  = require('@google-cloud/pubsub');
 const Uuid = require('uuid');
 
 module.exports = (server, options) => [
-    {
-        name: 'jobs.jobDelete',
-        method: jobDelete
-    },
+    // {
+    //     name: 'jobs.jobDelete',
+    //     method: jobDelete
+    // },
     {
         name: 'jobs.getList',
         method: getList
@@ -25,15 +25,19 @@ module.exports = (server, options) => [
     {
         name: 'jobs.relayJob',
         method: relayJob
+    },
+    {
+        name: 'jobs.deleteJob',
+        method: deleteJob
     }
 ];
 
 
-const jobDelete = async function (request, h) {
-    let id = request.params.id;
-    const contract = await Jobs.deleteOne({ _id: ObjectId(id) });
-    return contract;
-};
+// const jobDelete = async function (request, h) {
+//     let id = request.params.id;
+//     const contract = await Jobs.deleteOne({ _id: ObjectId(id) });
+//     return contract;
+// };
 
 const getList = async function (request, h) {
     const { collection, client } = await getConnection(request.query.from_node)
@@ -49,9 +53,9 @@ const getList = async function (request, h) {
     if (request.query.status !== "ALL") {
         filter["state"] = request.query.status || "FAILURE"
     } else {
-        filter["state"] = {
-            $ne: "PENDING"
-        }
+        // filter["state"] = {
+            // $ne: "PENDING"
+        // }
     }
 
     return new Promise((resolve, reject) => {
@@ -89,6 +93,29 @@ const jobDetail = async function (request, h) {
 };
 
 const relayJob = async function (request, h) {
+    let signature = request.payload
+    console.log(" signature ", signature)
+    const key = Uuid.v4();
+    signature.uuid = "task_" + key
+
+    // Instantiates a client
+    const pubsub = new PubSub({ projectId: Config.remotePubsub.projectId });
+    
+    // Creates the new topic
+    const dataBuffer = Buffer.from(JSON.stringify(signature));
+    const topic = pubsub.topic(Config.remotePubsub.topic)
+
+    const messageId = await topic.publish(dataBuffer);
+    
+    console.log(`Message ${messageId} published.`);
+    return {
+        uuid: signature.uuid,
+        messageId: messageId
+    }
+}
+
+
+const deleteJob = async function (request, h) {
     let signature = request.payload
     console.log(" signature ", signature)
     const key = Uuid.v4();

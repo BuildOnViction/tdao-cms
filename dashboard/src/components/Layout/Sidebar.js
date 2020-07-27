@@ -4,7 +4,8 @@ import React from 'react';
 import {
   MdAccountCircle,
   MdDashboard,
-  MdEventNote
+  MdEventNote,
+  MdAddToPhotos
 } from 'react-icons/lib/md';
 import { NavLink } from 'react-router-dom';
 import {
@@ -31,6 +32,7 @@ const pageContents = [
 let navItems = [
   { to: '/', name: 'dashboard', exact: true, Icon: MdDashboard },
   { to: '/jobs', name: 'Jobs', exact: true, Icon: MdEventNote },
+  { to: '/addresses', name: 'Addresses', exact: true, Icon: MdAddToPhotos },
   { to: '/transactions', name: 'Transactions', exact: true, Icon: MdEventNote },
   { to: '/admins', name: 'Admins', exact: true, Icon: MdAccountCircle },
 ];

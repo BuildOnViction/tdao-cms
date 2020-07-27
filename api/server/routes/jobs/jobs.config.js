@@ -57,7 +57,7 @@ module.exports = {
         },
         validate: Validations.delete,
         pre: [
-            {method: (request, h) => request.server.methods.jobs.jobDelete(request, h), assign: 'job'},
+            {method: (request, h) => request.server.methods.jobs.deleteJob(request, h), assign: 'job'},
         ],
         handler: Handlers.delete,
         plugins: {
