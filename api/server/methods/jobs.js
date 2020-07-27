@@ -6,7 +6,7 @@ var slugify = require('slugify');
 var Config = require('../config');
 const MongoModels = require('mongo-models');
 const Hoek = require('@hapi/hoek');
-const {PubSub}  = require('@google-cloud/pubsub');
+const { PubSub } = require('@google-cloud/pubsub');
 const Uuid = require('uuid');
 
 module.exports = (server, options) => [
@@ -54,7 +54,7 @@ const getList = async function (request, h) {
         filter["state"] = request.query.status || "FAILURE"
     } else {
         // filter["state"] = {
-            // $ne: "PENDING"
+        // $ne: "PENDING"
         // }
     }
 
@@ -76,7 +76,7 @@ const getList = async function (request, h) {
 };
 
 const getConnection = async function (env) {
-    const {uri, dbName} = Config.tasksUri[env]
+    const { uri, dbName } = Config.tasksUri[env]
     const client = await MongoClient.connect(uri, {});
     const db = client.db(dbName);
     const collection = db.collection('tasks');
@@ -100,13 +100,13 @@ const relayJob = async function (request, h) {
 
     // Instantiates a client
     const pubsub = new PubSub({ projectId: Config.remotePubsub.projectId });
-    
+
     // Creates the new topic
     const dataBuffer = Buffer.from(JSON.stringify(signature));
     const topic = pubsub.topic(Config.remotePubsub.topic)
 
     const messageId = await topic.publish(dataBuffer);
-    
+
     console.log(`Message ${messageId} published.`);
     return {
         uuid: signature.uuid,
@@ -117,19 +117,41 @@ const relayJob = async function (request, h) {
 
 const deleteJob = async function (request, h) {
     let signature = request.payload
+    if (signature.routingkey.indexOf("wallet") >= 0) {
+        const Redis = require('ioredis');
+        const key = Uuid.v4();
+        signature.uuid = "task_" + key
+        let result
+        const redis = new Redis("redis://localhost:6379/1");
+        const dataBuffer = Buffer.from(JSON.stringify(signature));
+        try {
+            result = await redis.rpush(signature.routingkey, dataBuffer);
+            console.log(result);
+        } catch (error) {
+            throw error;
+        }
+
+        redis.disconnect();
+        return {
+            uuid: signature.uuid,
+            messageId: result,
+        }
+    }
+
+
     console.log(" signature ", signature)
     const key = Uuid.v4();
     signature.uuid = "task_" + key
 
     // Instantiates a client
     const pubsub = new PubSub({ projectId: Config.remotePubsub.projectId });
-    
+
     // Creates the new topic
     const dataBuffer = Buffer.from(JSON.stringify(signature));
     const topic = pubsub.topic(Config.remotePubsub.topic)
 
     const messageId = await topic.publish(dataBuffer);
-    
+
     console.log(`Message ${messageId} published.`);
     return {
         uuid: signature.uuid,
