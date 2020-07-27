@@ -23,7 +23,7 @@ class AddressesPage extends React.Component {
     state = {
         page: 1,
         limit: 30,
-        coin_type: "ALL",
+        coin_type: "",
         address: "",
         data: []
     };
