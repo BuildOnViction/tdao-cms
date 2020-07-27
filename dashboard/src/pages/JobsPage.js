@@ -59,7 +59,7 @@ class JobsPage extends React.Component {
         this.toggle();
         history.push('/jobs');
     };
-    handlePageClick(data){
+    handlePageClick = (data) =>{
         this.loadJobs(parseInt(data.selected) + 1, 100, this.state.from_node, this.state.status);
     }
     search = (e) =>{
