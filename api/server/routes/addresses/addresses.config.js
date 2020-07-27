@@ -13,7 +13,6 @@ module.exports = {
         },
         auth: {
             strategy: 'jwt',
-            scope: ['admin'],
         },
         validate: Validations.getList,
         pre: [
@@ -33,7 +32,6 @@ module.exports = {
         },
         auth: {
             strategy: 'jwt',
-            scope: ['admin'],
         },
         validate: Validations.detail,
         pre: [
