@@ -15,7 +15,6 @@ import DashboardPage from 'pages/DashboardPage';
 import TransactionsPage from 'pages/TransactionsPage';
 import JobsPage from 'pages/JobsPage';
 import JobsDetailPage from 'pages/JobDetailPage';
-import JobsEditPage from 'pages/JobEditPage';
 import JobsCreatePage from 'pages/JobCreatePage';
 //admins
 
@@ -32,8 +31,6 @@ import BrokerEditPage from "./pages/BrokerEditPage";
 //user
 import UserPage from "./pages/UserPage";
 import UserDetailPage from "./pages/UserDetailPage";
-
-
 
 import React from 'react';
 import componentQueries from 'react-component-queries';
@@ -109,12 +106,7 @@ class App extends React.Component {
                 component={JobsDetailPage}
                />
 
-                <LayoutRoute
-                    exact
-                    path="/jobs/edit/:id"
-                    layout={MainLayout}
-                    component={JobsEditPage}
-                />
+                
                 <LayoutRoute
                     exact
                     path="/admins"

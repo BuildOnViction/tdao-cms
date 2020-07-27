@@ -22,7 +22,7 @@ class TransactionsPage extends React.Component {
 
     state = {
         page: 1,
-        limit: 100,
+        limit: 30,
         coin_type: "ALL",
         hash: "",
         data: []
@@ -41,9 +41,13 @@ class TransactionsPage extends React.Component {
         this.requestTransactions()
     }
 
-    handlePageClick(data){
-        this.setState({page:parseInt(data.selected) + 1});
-        this.requestTransactions();
+    handlePageClick = (data) => {
+        this.setState({
+            page:parseInt(data.selected) + 1
+        }, () => {
+                this.requestTransactions();
+        });
+        
     }
 
     search = (e) =>{
@@ -60,7 +64,7 @@ class TransactionsPage extends React.Component {
 
     render() {
         let data;
-        console.log("this.state.data ", this.state.data)
+
         if (this.state.data) {
             data = this.state.data.map((job, i) => {
                 let time = new Date(job.createdAt* 1000)
@@ -113,7 +117,7 @@ class TransactionsPage extends React.Component {
                                     <Row>
                                         <Col>
                                             <Card body>
-                                                <Table>
+                                                <Table style={{fontSize: "0.6vw"}}>
                                                     <thead>
                                                     <tr>
                                                         <th> Timestamp </th>
@@ -131,6 +135,16 @@ class TransactionsPage extends React.Component {
                                                     {data}
                                                     </tbody>
                                                 </Table>
+                                            <ReactPaginate
+                                                previousLabel={'previous'}
+                                                nextLabel={'next'}
+                                                breakLabel={'...'}
+                                                breakClassName={'break-me'}
+                                                onPageChange={this.handlePageClick}
+                                                containerClassName={'pagination'}
+                                                subContainerClassName={'pages pagination'}
+                                                activeClassName={'active'}
+                                            />
                                             </Card>
                                         </Col>
                                     </Row>

@@ -169,6 +169,16 @@ class JobsPage extends React.Component {
                                                     {data}
                                                     </tbody>
                                                 </Table>
+                                            <ReactPaginate
+                                                previousLabel={'previous'}
+                                                nextLabel={'next'}
+                                                breakLabel={'...'}
+                                                breakClassName={'break-me'}
+                                                onPageChange={this.handlePageClick}
+                                                containerClassName={'pagination'}
+                                                subContainerClassName={'pages pagination'}
+                                                activeClassName={'active'}
+                                            />
                                             </Card>
                                         </Col>
                                     </Row>

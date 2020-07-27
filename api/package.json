@@ -70,7 +70,8 @@
     "useragent": "2.x.x",
     "uuid": "^3.3.2",
     "vision": "5.x.x",
-    "vn-payments": "^1.1.0"
+    "vn-payments": "^1.1.0",
+    "web3": "^1.2.11"
   },
   "devDependencies": {
     "cheerio": "^1.0.0-rc.3",
