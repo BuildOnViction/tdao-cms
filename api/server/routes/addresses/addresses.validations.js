@@ -8,7 +8,7 @@ module.exports = {
     getList: {
         query: {
             address: Joi.string().allow(null).allow(''),
-            coin: Joi.string().default("ALL"),
+            coin: Joi.string().allow(null).allow('').default(""),
             limit: Joi.number().default(50),
             page: Joi.number().default(1)
         },
