@@ -77,6 +77,7 @@ class Sidebar extends React.Component {
         navItems = [
             { to: '/', name: 'dashboard', exact: true, Icon: MdDashboard },
             { to: '/transactions', name: 'Transactions', exact: true, Icon: MdEventNote },
+            { to: '/addresses', name: 'Addresses', exact: true, Icon: MdAddToPhotos },
     ]
             sidebar = navItems.map(({ to, name, exact, Icon }, index) => (
                 <NavItem key={index} className={bem.e('nav-item')}>
