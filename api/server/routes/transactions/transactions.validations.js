@@ -14,4 +14,11 @@ module.exports = {
             page: Joi.number().default(1)
         },
     },
+    rescan: {
+        query: {
+            coin: Joi.string().uppercase(),
+            blockNumber: Joi.number(),
+            coinAddress:Joi.string().allow(null).allow(''),
+        },
+    },
 };

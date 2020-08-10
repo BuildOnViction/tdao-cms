@@ -26,10 +26,7 @@ module.exports = (server, options) => [
         name: 'jobs.relayJob',
         method: relayJob
     },
-    {
-        name: 'jobs.deleteJob',
-        method: deleteJob
-    }
+
 ];
 
 
@@ -54,7 +51,8 @@ const getList = async function (request, h) {
         filter["state"] = request.query.status || "FAILURE"
     } else {
         // filter["state"] = {
-        // $ne: "PENDING"
+
+            // $ne: "PENDING"
         // }
     }
 
@@ -94,29 +92,6 @@ const jobDetail = async function (request, h) {
 
 const relayJob = async function (request, h) {
     let signature = request.payload
-    console.log(" signature ", signature)
-    const key = Uuid.v4();
-    signature.uuid = "task_" + key
-
-    // Instantiates a client
-    const pubsub = new PubSub({ projectId: Config.remotePubsub.projectId });
-
-    // Creates the new topic
-    const dataBuffer = Buffer.from(JSON.stringify(signature));
-    const topic = pubsub.topic(Config.remotePubsub.topic)
-
-    const messageId = await topic.publish(dataBuffer);
-
-    console.log(`Message ${messageId} published.`);
-    return {
-        uuid: signature.uuid,
-        messageId: messageId
-    }
-}
-
-
-const deleteJob = async function (request, h) {
-    let signature = request.payload
     if (signature.routingkey.indexOf("wallet") >= 0) {
         const Redis = require('ioredis');
         const key = Uuid.v4();
@@ -137,8 +112,6 @@ const deleteJob = async function (request, h) {
             messageId: result,
         }
     }
-
-
     console.log(" signature ", signature)
     const key = Uuid.v4();
     signature.uuid = "task_" + key
@@ -158,3 +131,4 @@ const deleteJob = async function (request, h) {
         messageId: messageId
     }
 }
+

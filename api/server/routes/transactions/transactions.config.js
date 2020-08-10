@@ -23,5 +23,25 @@ module.exports = {
         plugins: {
             policies: ['httpResponse']
         }
+    },
+    rescan: {
+        tags: ['api', 'transactions'],
+        description: 'Rescan 1 transaction',
+        notes: 'Rescan 1 transaction',
+        cors: {
+            origin: ['*']
+        },
+        auth: {
+            strategy: 'jwt',
+            scope: ['admin','editor'],
+        },
+        pre: [
+            {method: (request, h) => request.server.methods.transactions.rescan(request, h), assign: 'rescan'},
+        ],
+        validate: Validations.rescan,
+        handler: Handlers.rescan,
+        plugins: {
+            policies: ['httpResponse']
+        }
     }
 };

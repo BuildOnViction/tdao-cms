@@ -12,7 +12,7 @@ import connect from "react-redux/es/connect/connect";
 import ReactPaginate from 'react-paginate';
 import { Link } from "react-router-dom";
 import * as queryString from "query-string";
-import {listTransactions} from '../store/actions/transactions';
+import {listTransactions, rescan} from '../store/actions/transactions';
 import { history } from "App.js";
 
 class TransactionsPage extends React.Component {
@@ -25,7 +25,8 @@ class TransactionsPage extends React.Component {
         limit: 30,
         coin_type: "ALL",
         hash: "",
-        data: []
+        data: [],
+        rescan: {}
     };
 
     requestTransactions() {
@@ -62,6 +63,23 @@ class TransactionsPage extends React.Component {
         this.requestTransactions()
     }
 
+    onChangeRescanProperties = async (type, data) => {
+        let rescan = this.state.rescan
+        rescan[type] = data
+        await this.setState({
+            rescan
+        })
+    }
+
+    rescan = async () => {
+        console.log("this.state.rescan ", this.state.rescan)
+        this.props.rescan(this.state.rescan).then((data) => {
+            alert("Wait for 10 seconds and see new tx in transactions page")
+        }).catch((err) => {
+            alert(JSON.stringify(err))
+        })
+    }
+
     render() {
         let data;
 
@@ -85,6 +103,28 @@ class TransactionsPage extends React.Component {
                 breadcrumbs={[{ name: 'jobs', active: true }]}
                 className=""
             >
+                <Row>
+                    <Col>
+                        <Card className="mb-3">
+                            <CardBody>
+                                    <Row>
+                                        <Col xl={3} lg={3} md={3}>
+                                            <Input className="mb-2" onChange={(e) => this.onChangeRescanProperties("cointype", e.target.value)} type="text" placeholder="Coin type in upper case ie BTC, DEC, USDT" bsSize="md" />
+                                        </Col>
+                                        <Col xl={3} lg={3} md={3}>
+                                            <Input className="mb-2" onChange={(e) => this.onChangeRescanProperties("blocknumber", e.target.value)} type="text" placeholder="Block number" bsSize="md" />
+                                        </Col>
+                                        <Col xl={3} lg={3} md={3}>
+                                            <Input className="mb-2" onChange={(e) => this.onChangeRescanProperties("sc_address", e.target.value)} type="text" placeholder="ERC20 address for token not native coin" bsSize="md" />
+                                        </Col>
+                                        <Col xl={3} lg={3} md={3}>
+                                        <Button color="success" type='button' onClick={this.rescan}>Rescan</Button>
+                                        </Col>
+                                    </Row>
+                            </CardBody>
+                        </Card>
+                    </Col>
+                </Row>
                 <Row>
                     <Col>
                         <Card className="mb-3">
@@ -157,5 +197,5 @@ class TransactionsPage extends React.Component {
     }
 }
 
-export default connect(null, {listTransactions})(TransactionsPage);
+export default connect(null, {listTransactions, rescan})(TransactionsPage);
 
