@@ -5,7 +5,8 @@ import {
   MdAccountCircle,
   MdDashboard,
   MdEventNote,
-  MdAddToPhotos
+  MdAddToPhotos,
+  MdAccountBalance
 } from 'react-icons/lib/md';
 import { NavLink } from 'react-router-dom';
 import {
@@ -33,6 +34,7 @@ let navItems = [
   { to: '/', name: 'dashboard', exact: true, Icon: MdDashboard },
   { to: '/jobs', name: 'Jobs', exact: true, Icon: MdEventNote },
   { to: '/addresses', name: 'Addresses', exact: true, Icon: MdAddToPhotos },
+  { to: '/addresses-balance', name: 'Addresses Balance', exact: true, Icon: MdAccountBalance },
   { to: '/transactions', name: 'Transactions', exact: true, Icon: MdEventNote },
   { to: '/admins', name: 'Admins', exact: true, Icon: MdAccountCircle },
 ];
@@ -78,6 +80,7 @@ class Sidebar extends React.Component {
             { to: '/', name: 'dashboard', exact: true, Icon: MdDashboard },
             { to: '/transactions', name: 'Transactions', exact: true, Icon: MdEventNote },
             { to: '/addresses', name: 'Addresses', exact: true, Icon: MdAddToPhotos },
+            { to: '/addresses-balance', name: 'Addresses Balance', exact: true, Icon: MdAccountBalance },
     ]
             sidebar = navItems.map(({ to, name, exact, Icon }, index) => (
                 <NavItem key={index} className={bem.e('nav-item')}>

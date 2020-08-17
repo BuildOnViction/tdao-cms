@@ -16,7 +16,12 @@ module.exports = (server, options) => [
     },
     {
         method: 'GET',
-        path: '/addresses/{id}',
-        config: Config.detail
+        path: '/addresses/scan-balance',
+        config: Config.scanBalance
+    },
+    {
+        method: 'GET',
+        path: '/addresses/transfer-balance',
+        config: Config.transferBalance
     },
 ];

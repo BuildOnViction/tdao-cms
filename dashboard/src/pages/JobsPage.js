@@ -172,6 +172,7 @@ class JobsPage extends React.Component {
                                             <ReactPaginate
                                                 previousLabel={'previous'}
                                                 nextLabel={'next'}
+                                                pageCount={500}
                                                 breakLabel={'...'}
                                                 breakClassName={'break-me'}
                                                 onPageChange={this.handlePageClick}

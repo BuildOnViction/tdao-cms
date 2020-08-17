@@ -12,10 +12,10 @@ import connect from "react-redux/es/connect/connect";
 import ReactPaginate from 'react-paginate';
 import { Link } from "react-router-dom";
 import * as queryString from "query-string";
-import {listAddresses} from '../store/actions/addresses';
+import {scanBalance, transferBalance} from '../store/actions/addresses';
 import { history } from "App.js";
 
-class AddressesPage extends React.Component {
+class AddressesBalancePage extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -28,8 +28,15 @@ class AddressesPage extends React.Component {
         data: []
     };
 
-    requestAddresses() {
-        this.props.listAddresses(this.state.page, this.state.limit, this.state.coin_type, this.state.address).then((data) => {
+    requestAddressesBalance() {
+        if (!this.state.coin_type) {
+            return alert("Coin type needed")
+        }
+
+        this.props.scanBalance(this.state.coin_type).then((data) => {
+            if (data.payload.length == 0) {
+                return alert("No address got any balance - all transfer")
+            }
             this.setState({
                 data: data.payload
             })
@@ -37,28 +44,23 @@ class AddressesPage extends React.Component {
             alert(JSON.stringify(err))
         })
     }
-    componentDidMount() {
-        this.requestAddresses()
-    }
-
-    handlePageClick = (data) => {
-        this.setState({
-            page:parseInt(data.selected) + 1
-        }, () => {
-                this.requestAddresses();
-        });
-        
-    }
 
     search = () =>{
-        this.requestAddresses()
+        this.requestAddressesBalance()
     };
+
+    transferBalance = (address) => {
+        this.props.transferBalance(this.state.coin_type, address).then((data) => {
+            alert("Success ...")
+        }).catch((err) => {
+            alert(JSON.stringify(err))
+        })
+    }
 
     onChange = async (type, data) => {
         let updatingData = {}
         updatingData[type] = data
         await this.setState(updatingData)
-        // this.requestAddresses()
     }
 
     render() {
@@ -67,9 +69,13 @@ class AddressesPage extends React.Component {
         if (this.state.data) {
             data = this.state.data.map((address, i) => {
                 return (<tr key={i}>
-                    <td>{address.coin}</td>
-                    <td>{address.tomo}</td>
                     <td>{address.address}</td>
+                    <td>{address.balance}</td>
+                    <td>
+                        <Col xl={1} lg={1} md={1}>
+                            <Button onClick={() => this.transferBalance(address.address)} > transfer balance </Button>
+                        </Col>
+                    </td>
                 </tr>)
             })
         }
@@ -84,42 +90,33 @@ class AddressesPage extends React.Component {
                         <Card className="mb-3">
                             <CardBody>
                                     <Row>
-                                        <Col xl={7} lg={7} md={7}>
+                                        {/* <Col xl={7} lg={7} md={7}>
                                             <Input className="mb-2" onChange={(e) => this.onChange("address", e.target.value)} type="Search" placeholder="search" bsSize="md" />
-                                        </Col>
+                                        </Col> */}
                                         <Col xl={3} lg={3} md={3}>
                                             <Input className="mb-2" placeholder="Coin type" onChange={(e) => this.onChange("coin_type", e.target.value)} />
                                         </Col>
                                         <Col xl={1} lg={1} md={1}>
-                                            <Button onClick={this.search} > Search </Button>
+                                            <Button onClick={this.search} > Scan </Button>
                                         </Col>
                                     </Row>
+                                    
                                     <Row>
                                         <Col>
                                             <Card body>
                                                 <Table style={{fontSize: "0.6vw"}}>
                                                     <thead>
                                                     <tr>
-                                                        <th>Coin type</th>
-                                                        <th> Tomo Address </th>
                                                         <th> Issued Address </th>
+                                                        <th> Balance </th>
+                                                        <th></th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
                                                     {data}
                                                     </tbody>
                                                 </Table>
-                                            <ReactPaginate
-                                                previousLabel={'previous'}
-                                                nextLabel={'next'}
-                                                breakLabel={'...'}
-                                                pageCount={500}
-                                                breakClassName={'break-me'}
-                                                onPageChange={this.handlePageClick}
-                                                containerClassName={'pagination'}
-                                                subContainerClassName={'pages pagination'}
-                                                activeClassName={'active'}
-                                            />
+                                            
                                             </Card>
                                         </Col>
                                     </Row>
@@ -132,5 +129,5 @@ class AddressesPage extends React.Component {
     }
 }
 
-export default connect(null, {listAddresses})(AddressesPage);
+export default connect(null, {scanBalance, transferBalance})(AddressesBalancePage);
 

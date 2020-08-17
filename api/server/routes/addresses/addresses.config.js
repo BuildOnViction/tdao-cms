@@ -23,21 +23,40 @@ module.exports = {
             policies: ['httpResponse']
         }
     },
-    detail: {
+    scanBalance: {
         tags: ['api', 'addresses'],
-        description: 'Detail addresses [Root Scope]',
-        notes: 'Detail addresses',
+        description: 'Scan balance',
+        notes: 'Scan balance',
         cors: {
             origin: ['*']
         },
         auth: {
             strategy: 'jwt',
         },
-        validate: Validations.detail,
+        validate: Validations.scanBalance,
         pre: [
-            {method: (request, h) => request.server.methods.addresses.AddressDetail(request, h), assign: 'Address'},
+            {method: (request, h) => request.server.methods.addresses.scanBalance(request, h), assign: 'data'},
         ],
-        handler: Handlers.detail,
+        handler: Handlers.scanBalance,
+        plugins: {
+            policies: ['httpResponse']
+        }
+    },
+    transferBalance: {
+        tags: ['api', 'addresses'],
+        description: 'Scan balance',
+        notes: 'Scan balance',
+        cors: {
+            origin: ['*']
+        },
+        auth: {
+            strategy: 'jwt',
+        },
+        validate: Validations.transferBalance,
+        pre: [
+            {method: (request, h) => request.server.methods.addresses.transferBalance(request, h), assign: 'data'},
+        ],
+        handler: Handlers.transferBalance,
         plugins: {
             policies: ['httpResponse']
         }

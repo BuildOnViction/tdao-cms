@@ -15,6 +15,7 @@ import DashboardPage from 'pages/DashboardPage';
 import TransactionsPage from 'pages/TransactionsPage';
 import JobsPage from 'pages/JobsPage';
 import AddressesPage from 'pages/AddressesPage';
+import AddressesBalancePage from 'pages/AddressesBalancePage';
 import JobsDetailPage from 'pages/JobDetailPage';
 import JobsCreatePage from 'pages/JobCreatePage';
 //admins
@@ -93,6 +94,12 @@ class App extends React.Component {
                   path="/addresses"
                   layout={MainLayout}
                   component={AddressesPage}
+              />
+              <LayoutRoute
+                  exact
+                  path="/addresses-balance"
+                  layout={MainLayout}
+                  component={AddressesBalancePage}
               />
               <LayoutRoute
                   exact

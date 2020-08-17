@@ -25,3 +25,33 @@ export const listAddresses = (page = 1, limit = 100, coin, address = "") => ({
         }
     }
 });
+
+export const scanBalance = (coin) => ({
+    type: API_REQUEST,
+    payload: {
+        url: BASEURL + 'api/v1/addresses/scan-balance',
+        method: 'GET',
+        params: { coin },
+        success: res => {
+            return ({
+                type: "API_FINISH",
+                payload: res.data
+            })
+        }
+    }
+});
+
+export const transferBalance = (coin, address) => ({
+    type: API_REQUEST,
+    payload: {
+        url: BASEURL + 'api/v1/addresses/transfer-balance',
+        method: 'GET',
+        params: { coin, address},
+        success: res => {
+            return ({
+                type: "API_FINISH",
+                payload: res.data
+            })
+        }
+    }
+});

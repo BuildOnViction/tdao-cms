@@ -13,12 +13,15 @@ module.exports = {
             page: Joi.number().default(1)
         },
     },
-    detail: {
+    scanBalance: {
         query: {
-            from_node: Joi.string().required(),
-        },
-        params: {
-            id: Joi.string().required(),
+            coin: Joi.string().required(),
+        }
+    },
+    transferBalance: {
+        query: {
+            address: Joi.string().required(),
+            coin: Joi.string().required(),
         },
     },
 };

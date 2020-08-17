@@ -179,6 +179,7 @@ class TransactionsPage extends React.Component {
                                                 previousLabel={'previous'}
                                                 nextLabel={'next'}
                                                 breakLabel={'...'}
+                                                pageCount={500}
                                                 breakClassName={'break-me'}
                                                 onPageChange={this.handlePageClick}
                                                 containerClassName={'pagination'}
