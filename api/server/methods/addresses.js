@@ -19,7 +19,7 @@ module.exports = (server, options) => [
 ]
 
 const getListAddresses = async function (request, h) {
-    const { collection, client } = await getAddressConnection("api")
+    const { collection, client } = await getAddressConnection("wallet")
     let filter = {}
     let $and = []
     if (request.query.address) {
@@ -427,7 +427,7 @@ const transferBalance = async function (request, h) {
                         {
                             "name": "",
                             "type": "string",
-                            "value": res.index
+                            "value": res.index + ""
                         },
                         {
                             "name": "",
