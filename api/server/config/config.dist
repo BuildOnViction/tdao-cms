@@ -4,7 +4,6 @@ const build = require('../runtime/build_version.json');
 
 module.exports = {
     env: 'dev',
-
     product: {
         name: 'xkld',
         jwt: {
@@ -12,12 +11,12 @@ module.exports = {
         }
     },
     job_balance: {
-        register_default_balance:500000,
+        register_default_balance: 500000,
         jobs_default_balance: 20000
     },
     server: {
         host: '0.0.0.0',
-        port: process.env.PORT || 4444,
+        port: process.env.PORT || 3333,
         tls: false
     },
 
@@ -35,7 +34,7 @@ module.exports = {
             name: 'redis',
             partition: 'user-authen',
             host: '127.0.0.1',
-            database: 1
+            database: 0
         }
     },
 
@@ -44,11 +43,16 @@ module.exports = {
         forIpAndUser: 4
     },
 
+    remotePubsub: {
+        projectId: 'tomobridge',
+        topic: 'bridge'
+    },
+
     hapiMongoModels: {
         mongodb: {
             connection: {
-                uri: 'mongodb://localhost:27017/xkld-info-test',
-                db: 'xkld-info-test'
+                uri: 'mongodb://localhost:27018/tomobridgecms',
+                db: 'tomobridgecms',
             }
         },
         autoIndex: true
@@ -103,10 +107,56 @@ module.exports = {
     },
 
     apiPrefix: '/api/v1',
-    onepayDom:{
+    onepayDom: {
         paymentGateway: 'https://mtf.onepay.vn/onecomm-pay/vpc.op',
         merchant: 'ONEPAY',
         accessCode: 'D67342C2',
         secureSecret: 'A3EFDFABA8653DF2342E8DAC29B51AF0',
-    }
+    },
+    tasksUri: {
+        "wallet": {
+            uri: "mongodb://localhost:27017/gpcwalletlocal",
+            dbName: "gpcwalletlocal",
+        },
+        "proxy": {
+            uri: "mongodb://localhost:27017/gpcqueuejobs",
+            dbName: "gpcqueuejobs",
+        },
+        "master": {
+            uri: "mongodb://localhost:27017/gpcqueuejobs",
+            dbName: "gpcqueuejobs",
+        },
+        "verifier": {
+            uri: "mongodb://localhost:27017/gpcqueuejobs",
+            dbName: "gpcqueuejobs",
+        },
+        "api": {
+            uri: "mongodb://206.189.39.242:27017/",
+            dbName: "machinery_api",
+        },
+    },
+    transactionUri: {
+        "wallet": {
+            uri: "mongodb://localhost:27017/gpcwalletlocal",
+            dbName: "gpcwalletlocal",
+        },
+        "proxy": {
+            uri: "mongodb://localhost:27017/gpcqueuejobs",
+            dbName: "gpcqueuejobs",
+        },
+        "master": {
+            uri: "mongodb://localhost:27017/gpcqueuejobs",
+            dbName: "gpcqueuejobs",
+        },
+        "verifier": {
+            uri: "mongodb://localhost:27017/gpcqueuejobs",
+            dbName: "gpcqueuejobs",
+        },
+        "api": {
+            uri: "mongodb://tomobridge:anhlavip@206.189.39.242:27017/tomobridge",
+            dbName: "tomobridge",
+        },
+    },
+    bridgejobPATH: "/home/anhnt/projects/go/src/github.com/anhntbk08/tmbridgejob ",
+    bridgejobCLI: "./bridgecli "
 };
