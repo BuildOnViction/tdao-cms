@@ -363,12 +363,12 @@ const showERCBalanceToken = async function (coin, addresses) {
             const balanceOfTx = contract.methods.balanceOf(address).call()
                 .then(res => {
                     scannedAddresses++
-                    // if (res > 0) {
+                    if (res > 0) {
                         data.push({
                             address: address,
                             balance: res
                         });
-                    // }
+                    }
                     if (scannedAddresses == addresses.length) {
                         resolve(data)
                     }
@@ -427,7 +427,7 @@ const transferBalance = async function (request, h) {
                         {
                             "name": "",
                             "type": "string",
-                            "value": res.index + ""
+                            "value": res.index.toString()
                         },
                         {
                             "name": "",
