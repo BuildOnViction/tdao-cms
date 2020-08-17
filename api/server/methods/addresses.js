@@ -360,25 +360,47 @@ const showERCBalanceToken = async function (coin, addresses) {
         let scannedAddresses = 0
         let data = []
         addresses.forEach((address) => {
-            const balanceOfTx = contract.methods.balanceOf(address).call()
-                .then(res => {
-                    scannedAddresses++
-                    if (res > 0) {
-                        data.push({
-                            address: address,
-                            balance: res
-                        });
-                    }
-                    if (scannedAddresses == addresses.length) {
-                        resolve(data)
-                    }
-                })
-                .catch(function (ex) {
-                    scannedAddresses++
-                    if (scannedAddresses == addresses.length) {
-                        resolve(data)
-                    }
-                });
+            if (coin != "ETH") {
+                const balanceOfTx = contract.methods.balanceOf(address).call()
+                    .then(res => {
+                        scannedAddresses++
+                        if (res > 0) {
+                            data.push({
+                                address: address,
+                                balance: res
+                            });
+                        }
+                        if (scannedAddresses == addresses.length) {
+                            resolve(data)
+                        }
+                    })
+                    .catch(function (ex) {
+                        scannedAddresses++
+                        if (scannedAddresses == addresses.length) {
+                            resolve(data)
+                        }
+                    });
+            } else {
+                web3.eth.getBalance(address)
+                    .then(res => {
+                        scannedAddresses++
+                        if (res > 0) {
+                            data.push({
+                                address: address,
+                                balance: res
+                            });
+                        }
+                        if (scannedAddresses == addresses.length) {
+                            resolve(data)
+                        }
+                    })
+                    .catch(function (ex) {
+                        scannedAddresses++
+                        if (scannedAddresses == addresses.length) {
+                            resolve(data)
+                        }
+                    });
+            }
         });
     })
 }
@@ -427,7 +449,7 @@ const transferBalance = async function (request, h) {
                         {
                             "name": "",
                             "type": "string",
-                            "value": res.index.toString()
+                            "value": res.index.toString(10)
                         },
                         {
                             "name": "",
@@ -437,7 +459,7 @@ const transferBalance = async function (request, h) {
                         {
                             "name": "",
                             "type": "string",
-                            "value": "{\"BlockNumber\":10591729,\"BlockHash\":\"\",\"Hash\":\"\",\"CoinType\":\"\",\"From\":\"\",\"To\":\"\",\"Amount\":\"\",\"Timestamp\":\"2020-08-04T06:40:25.070656673Z\",\"Data\":\"\",\"Confirmations\":0,\"Status\":\"DEPOSITING\",\"ScID\":\"\"}"
+                            "value": "{\"BlockNumber\":10591729,\"BlockHash\":\"\",\"Hash\":\"\",\"CoinType\":\"" + request.query.coin + "\",\"From\":\"\",\"To\":\"\",\"Amount\":\"\",\"Timestamp\":\"2020-08-04T06:40:25.070656673Z\",\"Data\":\"\",\"Confirmations\":0,\"Status\":\"DEPOSITING\",\"ScID\":\"\"}"
                         }
                     ],
                     "headers": {},
