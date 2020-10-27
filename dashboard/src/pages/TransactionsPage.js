@@ -25,12 +25,13 @@ class TransactionsPage extends React.Component {
         limit: 30,
         coin_type: "ALL",
         hash: "",
+        from_address: "",
         data: [],
         rescan: {}
     };
 
     requestTransactions() {
-        this.props.listTransactions(this.state.page, this.state.limit, this.state.coin_type, this.state.hash).then((data) => {
+        this.props.listTransactions(this.state.page, this.state.limit, this.state.coin_type, this.state.hash, this.state.from_address).then((data) => {
             this.setState({
                 data: data.payload
             })
@@ -56,28 +57,13 @@ class TransactionsPage extends React.Component {
         this.requestTransactions()
     };
 
-    onChange = async (type, data) => {
-        let updatingData = {}
-        updatingData[type] = data
-        await this.setState(updatingData)
+    filterTransactions = async () => {
         this.requestTransactions()
     }
 
-    onChangeRescanProperties = async (type, data) => {
-        let rescan = this.state.rescan
-        rescan[type] = data
-        await this.setState({
-            rescan
-        })
-    }
-
-    rescan = async () => {
-        console.log("this.state.rescan ", this.state.rescan)
-        this.props.rescan(this.state.rescan).then((data) => {
-            alert("Wait for 10 seconds and see new tx in transactions page")
-        }).catch((err) => {
-            alert(JSON.stringify(err))
-        })
+    onChangeFilterProperties = async (type, data) => {
+        this.state[type] = data
+        await this.setState(this.state)
     }
 
     render() {
@@ -109,16 +95,17 @@ class TransactionsPage extends React.Component {
                             <CardBody>
                                     <Row>
                                         <Col xl={3} lg={3} md={3}>
-                                            <Input className="mb-2" onChange={(e) => this.onChangeRescanProperties("cointype", e.target.value)} type="text" placeholder="Coin type in upper case ie BTC, DEC, USDT" bsSize="md" />
+                                            <Input className="mb-2" onChange={(e) => this.onChangeFilterProperties("hash", e.target.value)} type="text" placeholder="Hash " bsSize="md" />
                                         </Col>
                                         <Col xl={3} lg={3} md={3}>
-                                            <Input className="mb-2" onChange={(e) => this.onChangeRescanProperties("blocknumber", e.target.value)} type="text" placeholder="Block number" bsSize="md" />
+                                        <Input className="mb-2" onChange={(e) => this.onChangeFilterProperties("coin_type", e.target.value)} type="text" placeholder="Coin type in upper case ie BTC, DEC, USDT" bsSize="md" />
+                                        </Col>
+                                        
+                                        <Col xl={3} lg={3} md={3}>
+                                            <Input className="mb-2" onChange={(e) => this.onChangeFilterProperties("from_address", e.target.value)} type="text" placeholder="User address" bsSize="md" />
                                         </Col>
                                         <Col xl={3} lg={3} md={3}>
-                                            <Input className="mb-2" onChange={(e) => this.onChangeRescanProperties("sc_address", e.target.value)} type="text" placeholder="ERC20 address for token not native coin" bsSize="md" />
-                                        </Col>
-                                        <Col xl={3} lg={3} md={3}>
-                                        <Button color="success" type='button' onClick={this.rescan}>Rescan</Button>
+                                        <Button color="success" type='button' onClick={this.requestTransactions}>Filter</Button>
                                         </Col>
                                     </Row>
                             </CardBody>
@@ -129,23 +116,6 @@ class TransactionsPage extends React.Component {
                     <Col>
                         <Card className="mb-3">
                             <CardBody>
-                                    <Row>
-                                        <Col xl={7} lg={7} md={7}>
-                                            <Input className="mb-2" onChange={(e) => this.onChange("hash", e.target.value)} type="Search" placeholder="search" bsSize="md" />
-                                        </Col>
-                                        <Col xl={3} lg={3} md={3}>
-                                            <Input type="select" name="coin_type" onChange={(e) => this.onChange("coin_type", e.target.value)}
-                                            >
-                                                <option value='ALL'>ALL</option>
-                                                <option value='BTC'>Mint BTC</option>
-                                                <option value='ETH'>Mint ETH</option>
-                                                <option value='USDT'>Mint USDT</option>
-                                                <option value='TOMOBTC'>Burn BTC</option>
-                                                <option value='TOMOETH'>Burn ETH</option>
-                                                <option value='TOMOUSDT'>Burn USDT</option>
-                                            </Input>
-                                        </Col>
-                                    </Row>
                                     <Row>
                                         <Col>
                                             <Card body>

@@ -11,12 +11,12 @@ import {
 import {BASEURL} from "config/constant";
 import {API_REQUEST} from '../constants/actions';
 
-export const listTransactions = (page = 1, limit = 100, coin_type = "", hash = "") => ({
+export const listTransactions = (page = 1, limit = 100, coin_type = "", hash = "", from_address = "") => ({
     type: API_REQUEST,
     payload: {
         url: BASEURL + 'api/v1/transactions',
         method: 'GET',
-        params: { page, limit, coin_type, hash },
+        params: { page, limit, coin_type, hash, from_address},
         success: res => {
             return ({
                 type: "API_FINISH",
