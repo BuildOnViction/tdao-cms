@@ -30,7 +30,7 @@ class TransactionsPage extends React.Component {
         rescan: {}
     };
 
-    requestTransactions() {
+    requestTransactions = () => {
         this.props.listTransactions(this.state.page, this.state.limit, this.state.coin_type, this.state.hash, this.state.from_address).then((data) => {
             this.setState({
                 data: data.payload
