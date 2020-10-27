@@ -22,27 +22,27 @@ const getListTransactions = async function (request, h) {
         $and.push({
             "$or": [
                 {
-                    "intx.from": request.query.from_address
+                    "InTx.From": request.query.from_address
                 },
                 {
-                    "outtx.to": request.query.from_address
+                    "OutTx.To": request.query.from_address
                 }
             ]
         })
     }
 
     if (request.query.coin_type && request.query.coin_type !== "ALL") {
-        filter["intx.cointype"] = request.query.coin_type
+        filter["InTx.CoinType"] = request.query.coin_type
     }
 
     if (request.query.hash) {
         $and.push({
             "$or": [
                 {
-                    "intx.hash": new RegExp(["^", request.query.hash, "$"].join(""), "i")
+                    "InTx.Hash": new RegExp(["^", request.query.hash, "$"].join(""), "i")
                 },
                 {
-                    "outtx.hash": new RegExp(["^", request.query.hash, "$"].join(""), "i")
+                    "Outtx.Hash": new RegExp(["^", request.query.hash, "$"].join(""), "i")
                 }
             ]
         })

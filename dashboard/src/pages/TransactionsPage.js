@@ -85,15 +85,15 @@ class TransactionsPage extends React.Component {
 
         if (this.state.data) {
             data = this.state.data.map((job, i) => {
-                let time = new Date(job.createdAt* 1000)
+                let time = new Date(job.CreatedAt* 1000)
                 return (<tr key={i}>
                     <td>{time.toString()}</td>
-                    <td>{job.intx.cointype}</td>
-                    <td style={{wordWrap: "break-word", maxWidth: "250px"}}>{job.intx.hash}</td>
-                    <td style={{wordWrap: "break-word", maxWidth: "250px"}}>{job.outtx.hash}</td>
-                    <td>{job.intx.to}</td>
-                    <td>{job.outtx.to}</td>
-                    <td>{job.intx.amount}</td>
+                    <td>{job.InTx.CoinType}</td>
+                    <td style={{ wordWrap: "break-word", maxWidth: "250px" }}>{job.InTx.Hash}</td>
+                    <td style={{ wordWrap: "break-word", maxWidth: "250px" }}>{job.OutTx.Hash}</td>
+                    <td>{job.InTx.To}</td>
+                    <td>{job.OutTx.To}</td>
+                    <td>{job.InTx.Amount}</td>
                 </tr>)
             })
         }
@@ -145,14 +145,6 @@ class TransactionsPage extends React.Component {
                                                 <option value='TOMOUSDT'>Burn USDT</option>
                                             </Input>
                                         </Col>
-                                        {/* <Col xl={3} lg={3} md={3}>
-                                            <Input type="select" name="status" onChange={(e) => this.onChange("status", e.target.value)}
-                                            >
-                                                <option value='ALL'>All</option>
-                                                <option value='SUCCESS'>Success</option>
-                                                <option value='FAILURE'>Fail</option>
-                                            </Input>
-                                        </Col> */}
                                     </Row>
                                     <Row>
                                         <Col>
@@ -167,8 +159,6 @@ class TransactionsPage extends React.Component {
                                                         <th >In receiver</th>
                                                         <th >Out receiver</th>
                                                         <th >Amount</th>
-                                                        {/* <th >In status</th> */}
-                                                        {/* <th >Out status</th> */}
                                                     </tr>
                                                     </thead>
                                                     <tbody>
