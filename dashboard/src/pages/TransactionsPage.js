@@ -1,23 +1,42 @@
 import Page from '../components/Page';
 import React from 'react';
-import { Card, CardBody, CardHeader, Col, Row, Table, Button, Alert, Modal,
-    ModalBody,
-    ModalFooter,
-    ModalHeader,ButtonGroup,
-    Input,
-    UncontrolledAlert
-} from 'reactstrap';
+import { Card, CardBody, Col, Row, Table, Button, Input} from 'reactstrap';
 import connect from "react-redux/es/connect/connect";
-
+import XLSX from 'xlsx';
 import ReactPaginate from 'react-paginate';
-import { Link } from "react-router-dom";
-import * as queryString from "query-string";
 import {listTransactions, rescan} from '../store/actions/transactions';
-import { history } from "App.js";
+// import { history } from "App.js";
 
 class TransactionsPage extends React.Component {
     constructor(props) {
         super(props);
+    }
+
+    export = () => {
+        let transactions = this.state.data
+        var filename = "transactions.xlsx";
+        var data = [
+            ['Time', 'Token', 'InTx', 'OutTx', 'Receiver', 'Amount'],
+        ];
+
+        transactions.forEach(transaction => {
+            let time = new Date(transaction.CreatedAt * 1000)
+            data.push([
+                time.toString(),
+                transaction.InTx.CoinType,
+                transaction.InTx.Hash,
+                transaction.OutTx.Hash,
+                transaction.OutTx.To,
+                transaction.InTx.Amount
+            ])
+        });
+
+        var ws_name = "Transactions";
+        var wb = XLSX.utils.book_new();
+        var ws = XLSX.utils.aoa_to_sheet(data);
+
+        XLSX.utils.book_append_sheet(wb, ws, ws_name);
+        XLSX.writeFile(wb, filename);
     }
 
     state = {
@@ -106,6 +125,7 @@ class TransactionsPage extends React.Component {
                                         </Col>
                                         <Col xl={3} lg={3} md={3}>
                                         <Button color="success" type='button' onClick={this.requestTransactions}>Filter</Button>
+                                        <Button color="danger" type='button' onClick={this.export} style={{ marginLeft: "10px" }}>Export</Button>
                                         </Col>
                                     </Row>
                             </CardBody>

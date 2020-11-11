@@ -22,10 +22,10 @@ const getListTransactions = async function (request, h) {
         $and.push({
             "$or": [
                 {
-                    "InTx.From": request.query.from_address
+                    "InTx.From": new RegExp(request.query.from_address, 'ig')
                 },
                 {
-                    "OutTx.To": request.query.from_address
+                    "OutTx.To": new RegExp(request.query.from_address, 'ig')
                 }
             ]
         })
