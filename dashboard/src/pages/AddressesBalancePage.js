@@ -25,6 +25,7 @@ class AddressesBalancePage extends React.Component {
         limit: 30,
         coin_type: "",
         address: "",
+	decimal: 18,
         data: []
     };
 
@@ -70,7 +71,7 @@ class AddressesBalancePage extends React.Component {
             data = this.state.data.map((address, i) => {
                 return (<tr key={i}>
                     <td>{address.address}</td>
-                    <td>{address.balance}</td>
+                    <td>{parseFloat(address.balance)/ (10** parseInt(this.state.decimal))}</td>
                     <td>
                         <Col xl={1} lg={1} md={1}>
                             <Button onClick={() => this.transferBalance(address.address)} > transfer balance </Button>
@@ -95,6 +96,9 @@ class AddressesBalancePage extends React.Component {
                                         </Col> */}
                                         <Col xl={3} lg={3} md={3}>
                                             <Input className="mb-2" placeholder="Coin type" onChange={(e) => this.onChange("coin_type", e.target.value)} />
+                                        </Col>
+					<Col xl={3} lg={3} md={3}>
+                                            <Input className="mb-2" placeholder="Decimal " onChange={(e) => this.onChange("decimal", e.target.value)} />
                                         </Col>
                                         <Col xl={1} lg={1} md={1}>
                                             <Button onClick={this.search} > Scan </Button>

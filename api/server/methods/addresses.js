@@ -410,10 +410,11 @@ const getListBalance = async function (request, h) {
 
     return new Promise((resolve, reject) => {
         collection
-            .distinct("to", {
-                "cointype": request.query.coin,
+            .distinct("InTx.To", {
+                "InTx.CoinType": request.query.coin,
             })
             .then(function (result) {
+		console.log(result)
                 if (result.length == 0) {
                     return resolve([])
                 }
@@ -449,7 +450,7 @@ const transferBalance = async function (request, h) {
                         {
                             "name": "",
                             "type": "string",
-                            "value": res.index.toString(10)
+                            "value": res.account_index.toString(10)
                         },
                         {
                             "name": "",

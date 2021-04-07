@@ -84,6 +84,23 @@ class TransactionsPage extends React.Component {
         this.state[type] = data
         await this.setState(this.state)
     }
+    
+	   onChangeRescanProperties = async (type, data) => {
+        let rescan = this.state.rescan
+        rescan[type] = data
+        await this.setState({
+            rescan
+        })
+    }
+
+    rescan = async () => {
+        console.log("this.state.rescan ", this.state.rescan)
+        this.props.rescan(this.state.rescan).then((data) => {
+            alert("Wait for 10 seconds and see new tx in transactions page")
+        }).catch((err) => {
+            alert(JSON.stringify(err))
+        })
+    }
 
     render() {
         let data;
@@ -112,6 +129,29 @@ class TransactionsPage extends React.Component {
                     <Col>
                         <Card className="mb-3">
                             <CardBody>
+			                            <Row>
+                    <Col>
+                        <Card className="mb-3">
+                            <CardBody>
+                                    <Row>
+                                        <Col xl={3} lg={3} md={3}>
+                                            <Input className="mb-2" onChange={(e) => this.onChangeRescanProperties("cointype", e.target.value)} type="text" placeholder="Coin type in upper case ie BTC, DEC, USDT" bsSize="md" />
+                                        </Col>
+                                        <Col xl={3} lg={3} md={3}>
+                                            <Input className="mb-2" onChange={(e) => this.onChangeRescanProperties("blocknumber", e.target.value)} type="text" placeholder="Block number" bsSize="md" />
+                                        </Col>
+                                        <Col xl={3} lg={3} md={3}>
+                                            <Input className="mb-2" onChange={(e) => this.onChangeRescanProperties("sc_address", e.target.value)} type="text" placeholder="ERC20 address for token not native coin" bsSize="md" />
+                                        </Col>
+                                        <Col xl={3} lg={3} md={3}>
+                                        <Button color="success" type='button' onClick={this.rescan}>Rescan</Button>
+                                        </Col>
+                                    </Row>
+                            </CardBody>
+                        </Card>
+                    </Col>
+                </Row>
+
                                     <Row>
                                         <Col xl={3} lg={3} md={3}>
                                             <Input className="mb-2" onChange={(e) => this.onChangeFilterProperties("hash", e.target.value)} type="text" placeholder="Hash " bsSize="md" />
