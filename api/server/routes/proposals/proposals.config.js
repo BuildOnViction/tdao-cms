@@ -11,7 +11,10 @@ module.exports = {
         cors: {
             origin: ['*']
         },
-        auth: false,
+        auth: {
+            strategy: 'jwt',
+            scope: ['admin','editor'],
+        },
         pre: [
             {method: (request, h) => request.server.methods.proposals.getList(request, h), assign: 'proposals'},
         ],
@@ -28,7 +31,10 @@ module.exports = {
         cors: {
             origin: ['*']
         },
-        auth: false,
+        auth: {
+            strategy: 'jwt',
+            scope: ['admin','editor'],
+        },
         pre: [
             {method: (request, h) => request.server.methods.proposals.approve(request, h), assign: 'output'},
         ],
