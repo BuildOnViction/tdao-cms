@@ -32,11 +32,8 @@ const pageContents = [
 
 let navItems = [
   { to: '/', name: 'dashboard', exact: true, Icon: MdDashboard },
-  { to: '/jobs', name: 'Jobs', exact: true, Icon: MdEventNote },
-  { to: '/addresses', name: 'Addresses', exact: true, Icon: MdAddToPhotos },
-  { to: '/addresses-balance', name: 'Addresses Balance', exact: true, Icon: MdAccountBalance },
-  { to: '/transactions', name: 'Transactions', exact: true, Icon: MdEventNote },
-  { to: '/admins', name: 'Admins', exact: true, Icon: MdAccountCircle },
+  { to: '/proposals', name: 'Proposals', exact: true, Icon: MdEventNote },
+  // { to: '/admins', name: 'Admins', exact: true, Icon: MdAccountCircle },
 ];
 
 const bem = bn.create('sidebar');
@@ -78,9 +75,8 @@ class Sidebar extends React.Component {
     }else{
         navItems = [
             { to: '/', name: 'dashboard', exact: true, Icon: MdDashboard },
-            { to: '/transactions', name: 'Transactions', exact: true, Icon: MdEventNote },
-            { to: '/addresses', name: 'Addresses', exact: true, Icon: MdAddToPhotos },
-            { to: '/addresses-balance', name: 'Addresses Balance', exact: true, Icon: MdAccountBalance },
+            { to: '/proposals', name: 'Proposals', exact: true, Icon: MdEventNote },
+            
     ]
             sidebar = navItems.map(({ to, name, exact, Icon }, index) => (
                 <NavItem key={index} className={bem.e('nav-item')}>
@@ -104,7 +100,7 @@ class Sidebar extends React.Component {
           <Navbar>
             <SourceLink className="navbar-brand d-flex">
               <span className="text-white">
-                Tomo Bridge CMS
+                TDAO CMS
               </span>
             </SourceLink>
           </Navbar>

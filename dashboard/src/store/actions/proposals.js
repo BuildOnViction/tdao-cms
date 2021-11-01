@@ -11,12 +11,12 @@ import {
 import {BASEURL} from "config/constant";
 import {API_REQUEST} from '../constants/actions';
 
-export const listTransactions = (page = 1, limit = 100, coin_type = "", hash = "", from_address = "") => ({
+export const listProposals = (page = 1, limit = 100) => ({
     type: API_REQUEST,
     payload: {
-        url: BASEURL + 'api/v1/transactions',
+        url: BASEURL + 'api/v1/proposals',
         method: 'GET',
-        params: { page, limit, coin_type, hash, from_address},
+        params: { page, limit},
         success: res => {
             return ({
                 type: "API_FINISH",
@@ -26,12 +26,12 @@ export const listTransactions = (page = 1, limit = 100, coin_type = "", hash = "
     }
 });
 
-export const rescan = ({cointype, blocknumber, sc_address}) => ({
+export const approve = (id, quorum) => ({
     type: API_REQUEST,
     payload: {
-        url: BASEURL + 'api/v1/transactions/rescan',
-        method: 'GET',
-        params: { coin: cointype, blockNumber: blocknumber, coinAddress: sc_address },
+        url: BASEURL + 'api/v1/proposals/approve/' + id,
+        method: 'PUT',
+        params: { quorum },
         success: res => {
             return ({
                 type: "API_FINISH",

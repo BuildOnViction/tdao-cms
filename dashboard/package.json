@@ -1,5 +1,5 @@
 {
-  "name": "bridgecms-dashboard",
+  "name": "tdaocms-dashboard",
   "version": "1.0.0",
   "private": false,
   "homepage": "",
@@ -43,8 +43,8 @@
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
     "victory": "^0.27.1",
-    "yup": "^0.27.0",
-    "xlsx": "0.16.8"
+    "xlsx": "0.16.8",
+    "yup": "^0.27.0"
   },
   "devDependencies": {
     "get-env": "^0.5.10",

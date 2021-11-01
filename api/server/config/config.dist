@@ -28,6 +28,15 @@ module.exports = {
         }
     },
 
+    mysql: {
+        username: 'snapshot',
+        password: 'Snapshot_123',
+        database: 'snapshot',
+        host: 'localhost',
+        dialect: 'mysql',
+        logging: false
+    },
+    
     cache: {
         redis: {
             engine: require('catbox-redis'),

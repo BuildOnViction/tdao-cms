@@ -2,9 +2,9 @@
 
 module.exports = {
     getList: (request) => {
-        return request.pre.transactions;
+        return request.pre.proposals;
     },
-    rescan: (request) => {
+    approve: (request) => {
         return request.pre.output;
     }
 };

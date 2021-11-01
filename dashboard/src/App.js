@@ -12,7 +12,7 @@ import { FREELY_ACCESS_PAGES } from 'config/constant';
 
 // pages
 import DashboardPage from 'pages/DashboardPage';
-import TransactionsPage from 'pages/TransactionsPage';
+import ProposalsPage from 'pages/ProposalsPage';
 import JobsPage from 'pages/JobsPage';
 import AddressesPage from 'pages/AddressesPage';
 import AddressesBalancePage from 'pages/AddressesBalancePage';
@@ -103,9 +103,9 @@ class App extends React.Component {
               />
               <LayoutRoute
                   exact
-                  path="/transactions"
+                  path="/proposals"
                   layout={MainLayout}
-                  component={TransactionsPage}
+                  component={ProposalsPage}
               />
               <LayoutRoute
                 exact

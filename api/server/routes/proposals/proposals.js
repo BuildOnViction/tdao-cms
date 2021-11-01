@@ -6,17 +6,17 @@
 
 'use strict';
 
-const Config = require('./transactions.config');
+const Config = require('./proposals.config');
 
 module.exports = (server, options) => [
     {
         method: 'GET',
-        path: '/transactions',
+        path: '/proposals',
         config: Config.get
     },
     {
-        method: 'GET',
-        path: '/transactions/rescan',
-        config: Config.rescan
+        method: 'PUT',
+        path: '/proposals/approve/{id}',
+        config: Config.approve
     }
 ];
