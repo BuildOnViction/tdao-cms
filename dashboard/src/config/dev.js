@@ -1,4 +1,4 @@
-export const BASEURL = "http://localhost:3333/";
+export const BASEURL = "http://localhost:5555/";
 export default BASEURL;
 
 export const FREELY_ACCESS_PAGES = {
