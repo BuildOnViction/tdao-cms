@@ -19,24 +19,11 @@ import {
 import {
     jwt
 } from './jwt';
-import {
-    jobs
-} from './jobs';
-import {
-    brokers
-} from './broker'
-import {
-    jobTypes
-} from './jobTypes'
+
 import {
     admins
 } from './admins'
-import {
-    companies
-} from './companies'
-import {
-    users
-} from './users'
+
 // import {
 //     router
 // } from 'redux-ui-router';
@@ -54,12 +41,7 @@ export default combineReducers({
         lastRoute
     }),
     jwt,
-    companies,
-    jobs,
-    brokers,
     admins,
-    jobTypes,
-    users,
     ui: combineReducers({
         toast
     })

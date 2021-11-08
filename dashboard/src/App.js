@@ -13,26 +13,13 @@ import { FREELY_ACCESS_PAGES } from 'config/constant';
 // pages
 import DashboardPage from 'pages/DashboardPage';
 import ProposalsPage from 'pages/ProposalsPage';
-import JobsPage from 'pages/JobsPage';
-import AddressesPage from 'pages/AddressesPage';
-import AddressesBalancePage from 'pages/AddressesBalancePage';
-import JobsDetailPage from 'pages/JobDetailPage';
-import JobsCreatePage from 'pages/JobCreatePage';
+import ProposalsDetailPage from 'pages/ProposalsDetailPage';
 //admins
 
 import AdminPage from 'pages/AdminPage';
 import AdminDetailPage from 'pages/AdminDetailPage';
 import AdminEditPage from "./pages/AdminEditPage";
 import AdminCreatePage from "./pages/AdminCreatePage";
-
-//broker
-import BrokerPage from './pages/BrokerPage';
-import BrokerDetailPage from "./pages/BrokerDetailPage";
-import BrokerCreatePage from "./pages/BrokerCreatePage";
-import BrokerEditPage from "./pages/BrokerEditPage";
-//user
-import UserPage from "./pages/UserPage";
-import UserDetailPage from "./pages/UserDetailPage";
 
 import React from 'react';
 import componentQueries from 'react-component-queries';
@@ -85,42 +72,17 @@ class App extends React.Component {
               />
               <LayoutRoute
                   exact
-                  path="/jobs"
-                  layout={MainLayout}
-                  component={JobsPage}
-              />
-              <LayoutRoute
-                  exact
-                  path="/addresses"
-                  layout={MainLayout}
-                  component={AddressesPage}
-              />
-              <LayoutRoute
-                  exact
-                  path="/addresses-balance"
-                  layout={MainLayout}
-                  component={AddressesBalancePage}
-              />
-              <LayoutRoute
-                  exact
                   path="/proposals"
                   layout={MainLayout}
                   component={ProposalsPage}
               />
-              <LayoutRoute
+               <LayoutRoute
                 exact
-                path="/jobs/create"
+                path="/proposals/:id"
                 layout={MainLayout}
-                component={JobsCreatePage}
-              />
-              <LayoutRoute
-                exact
-                path="/jobs/:id"
-                layout={MainLayout}
-                component={JobsDetailPage}
+                component={ProposalsDetailPage}
                />
 
-                
                 <LayoutRoute
                     exact
                     path="/admins"
@@ -145,42 +107,7 @@ class App extends React.Component {
                     layout={MainLayout}
                     component={AdminDetailPage}
                 />
-                <LayoutRoute
-                    exact
-                    path="/brokers"
-                    layout={MainLayout}
-                    component={BrokerPage}
-                />
-                <LayoutRoute
-                    exact
-                    path="/brokers/create"
-                    layout={MainLayout}
-                    component={BrokerCreatePage}
-                />
-                <LayoutRoute
-                    exact
-                    path="/brokers/edit/:id"
-                    layout={MainLayout}
-                    component={BrokerEditPage}
-                />
-                <LayoutRoute
-                    exact
-                    path="/brokers/:id"
-                    layout={MainLayout}
-                    component={BrokerDetailPage}
-                />
-                <LayoutRoute
-                    exact
-                    path="/users"
-                    layout={MainLayout}
-                    component={UserPage}
-                />
-                <LayoutRoute
-                    exact
-                    path="/users/:id"
-                    layout={MainLayout}
-                    component={UserDetailPage}
-                />
+
               <Redirect to="/dashboard" />
             </Switch>
           </Router>

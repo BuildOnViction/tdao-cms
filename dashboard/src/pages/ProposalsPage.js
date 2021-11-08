@@ -5,7 +5,7 @@ import connect from "react-redux/es/connect/connect";
 import XLSX from 'xlsx';
 import ReactPaginate from 'react-paginate';
 import { listProposals, approve } from '../store/actions/proposals';
-// import { history } from "App.js";
+import { Link } from "react-router-dom";
 
 class ProposalsPage extends React.Component {
     constructor(props) {
@@ -123,9 +123,10 @@ class ProposalsPage extends React.Component {
                     <td>{new Date(proposal.end*1000).toString()}</td>
                     <td>{proposal.fundingRequest} $</td>
                     <td>
-                        <Button color="info" onClick={() => this.approve(proposal.id)}><div className="button-detail">
-                            Approve
-                        </div></Button>
+                        <ButtonGroup className="mr-3 mb-3">
+                            <Button color="info"><div className="button-detail"><Link to={"/proposals/"+proposal.id}>detail</Link></div></Button>
+                            <Button color="danger" onClick={()=>{ this.approve(proposal.id);}}>Approve</Button>
+                        </ButtonGroup>
                     </td>
                 </tr>)
             })

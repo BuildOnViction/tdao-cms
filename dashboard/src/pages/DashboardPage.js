@@ -35,7 +35,7 @@ class DashboardPage extends React.Component {
 }
 export default connect((state) => {
     return {
-        statistics: state.users.statistics
+        statistics: {}
     }
 }, {getStatisticsUser})(DashboardPage);
 

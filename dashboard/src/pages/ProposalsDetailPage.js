@@ -17,12 +17,7 @@ import 'froala-editor/css/froala_style.min.css';
 import 'froala-editor/css/froala_editor.pkgd.min.css';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import { getListCompanies } from '../store/actions/companies'
-import {putBroker} from '../store/actions/broker';
 import Select from 'react-select';
-// Require Font Awesome.
-// import 'font-awesome/css/font-awesome.css';
-
 
 const createSchema = Yup.object().shape({
     name: Yup.string()
@@ -43,34 +38,28 @@ const createSchema = Yup.object().shape({
         .oneOf([Yup.ref('password'), null], 'Password không khớp')
 
 });
-class BrokerEditPage extends React.Component {
+class ProposalsDetailPage extends React.Component {
 
     constructor(props) {
         super(props);
-        this.props.getListCompanies();
+        this.state = {
+            detail: {}
+        }
     }
 
     render() {
         let options = []
-        if(this.props.companies.docs){
-            this.props.companies.docs.forEach((company)=>{
-                options.push({value:JSON.stringify({
-                        id: company._id,
-                        name: company.name
-                    }),label:company.name})
-            })
-
-        }
+      
         let errMsg;
-        if(this.props.error && this.props.error.errorMsg){
+        if(this.state.error && this.state.error.errorMsg){
             errMsg = <UncontrolledAlert color="danger">
-                {this.props.error.errorMsg}
+                {this.state.error.errorMsg}
             </UncontrolledAlert>
         }
         return (
             <Page
                 title="Tạo người môi giới"
-                breadcrumbs={[{ name: 'brokers', active: true }]}
+                breadcrumbs={[{ name: 'proposals', active: true }]}
                 className="TablePage"
             >
                 <Row>
@@ -81,22 +70,17 @@ class BrokerEditPage extends React.Component {
                                 <Formik
                                     initialValues={
                                         {
-                                            name: this.props.detail.broker.name,
-                                            email: this.props.detail.user.email,
+                                            name: this.state.detail.name,
+                                            email: this.state.detail.email,
                                             password: "",
-                                            phone: this.props.detail.user.phone,
-                                            introduce: this.props.detail.broker.introduce,
-                                            company: JSON.stringify(this.props.detail.broker.company),
+                                            phone: this.state.detail.phone,
+                                            introduce: this.state.detail.introduce,
                                         }
                                     }
                                     validationSchema={createSchema }
                                     onSubmit={async values => {
-                                        let data ={name:values.name,email:values.email,phone: values.phone,introduce:values.introduce, dob: values.dob, company:values.company};
-                                        if(values.password){
-                                            Object.assign(data,{password: values.password})
-                                        }
-                                        await this.props.putBroker(this.props.match.params.id,data);
-                                        history.push('/brokers/'+this.props.match.params.id+'?success=true');
+                                        console.log(values);
+                                        history.push('/proposals/'+this.state.match.params.id+'?success=true');
                                     }}
                                 >
                                     {({ errors, touched, values, handleChange,handleBlur, setFieldValue }) => (
@@ -222,7 +206,7 @@ class BrokerEditPage extends React.Component {
                                             <FormGroup>
                                                 <Label for="company">Công ty</Label>
                                                 <br></br>
-                                                {this.props.detail&&this.props.detail.broker&&this.props.detail.broker.company?this.props.detail.broker.company.name:null}
+                                                {this.state.detail&&this.state.detail.broker&&this.state.detail.broker.company?this.state.detail.broker.company.name:null}
                                                 <br></br>
                                                 <Select
                                                     name="company"
@@ -268,8 +252,7 @@ class BrokerEditPage extends React.Component {
 
 export default connect((state) => {
     return  {
-        companies: state.companies.list_company,
-        detail: state.brokers.broker_detail,
-        error: state.common.requests.error,
+        detail: [],
+        error: null,
     }
-}, {getListCompanies,putBroker})(BrokerEditPage);
+}, {})(ProposalsDetailPage);
