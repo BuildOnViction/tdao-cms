@@ -15,8 +15,18 @@ module.exports = (server, options) => [
         config: Config.get
     },
     {
+        method: 'GET',
+        path: '/proposals/{id}',
+        config: Config.getOne
+    },
+    {
         method: 'PUT',
         path: '/proposals/approve/{id}',
         config: Config.approve
+    },
+    {
+        method: 'PUT',
+        path: '/proposals/reject/{id}',
+        config: Config.reject
     }
 ];

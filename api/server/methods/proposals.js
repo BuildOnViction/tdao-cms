@@ -52,8 +52,16 @@ module.exports = (server, options) => [
         method: getProposals
     },
     {
+        name: 'proposals.getOne',
+        method: getProposal
+    },
+    {
         name: 'proposals.approve',
         method: approveProposal
+    },
+    {
+        name: 'proposals.reject',
+        method: rejectProposal
     },
 ]
 
@@ -75,14 +83,42 @@ const getProposals = async function (request, h) {
     return proposals;
 }
 
+const getProposal = async function (request, h) {
+    const proposal = await Proposal.findOne({
+        where: {
+            id: request.params.id
+        },
+    });
+    return proposal;
+}
+
+
+const rejectProposal = async function (request, h) {
+    let id = request.params.id;
+
+    const result = await Proposal.update({
+        reason: request.payload.reason,
+        status: 'REJECTED'
+    },{
+        where: {
+            id: id,
+            status: "PENDING"
+        }
+    });
+    return result;
+}
+
 
 const approveProposal = async function (request, h) {
     let id = request.params.id;
-    const result = await Proposal.update({
-        status: 'APPROVED',
-        quorum: request.query.quorum
-    },{
-        where: { id: id }
+
+    request.payload.status = 'APPROVED';
+    request.payload.approvedBy = request.auth.credentials.user._doc;
+    const result = await Proposal.update(request.payload,{
+        where: {
+            id: id,
+            status: "PENDING"
+        }
     });
     return result;
 }
