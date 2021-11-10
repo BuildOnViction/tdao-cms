@@ -113,20 +113,21 @@ class ProposalsPage extends React.Component {
         if (this.state.data) {
             data = this.state.data.map((proposal, i) => {
                 return (<tr key={i}>
-                    <td>{proposal.title}</td>
-                    <td>{proposal.descriptions}</td>
-                    <td>{proposal.milestones}</td>
-                    <td>{proposal.website}</td>
-                    <td>{proposal.github}</td>
-                    <td>{proposal.twitter}</td>
+                    <td><a href={proposal.title} title={proposal.title}>{proposal.title}</a></td>
+                    <td><a href={proposal.descriptions} title={proposal.descriptions}>{proposal.descriptions}</a></td>
+                    {/* <td><a href={proposal.milestones} title={proposal.milestones}>{proposal.milestones}</a></td> */}
+                    <td><a href={proposal.website} title={proposal.website}>{proposal.website}</a></td>
+                    <td><a href={proposal.github} title={proposal.github}>{proposal.github}</a></td>
+                    <td><a href={proposal.twitter} title={proposal.twitter}>{proposal.twitter}</a></td>
                     <td>{new Date(proposal.start*1000).toString()}</td>
-                    <td>{new Date(proposal.end*1000).toString()}</td>
+                    {/* <td>{new Date(proposal.end*1000).toString()}</td> */}
                     <td>{proposal.fundingRequest} $</td>
                     <td>
-                        <ButtonGroup className="mr-3 mb-3">
-                            <Button color="info"><div className="button-detail"><Link to={"/proposals/"+proposal.id}>detail</Link></div></Button>
-                            <Button color="danger" onClick={()=>{ this.approve(proposal.id);}}>Approve</Button>
-                        </ButtonGroup>
+                        <div className="text-center">
+                            <Link className="link-detail" to={"/proposals/"+proposal.id}>Detail</Link>
+                            <br />
+                            <Button className="btn-t1-medium" color="danger" onClick={()=>{ this.approve(proposal.id);}}>Approve</Button>
+                        </div>
                     </td>
                 </tr>)
             })
@@ -135,7 +136,7 @@ class ProposalsPage extends React.Component {
             <Page
                 title="Pending Proposal"
                 breadcrumbs={[{ name: 'proposals', active: true }]}
-                className=""
+                className="style-table"
             >
                 <Row>
                     <Col>
@@ -144,21 +145,17 @@ class ProposalsPage extends React.Component {
                                 <Row>
                                     <Col>
                                         <Card body>
-                                            <Table style={{ fontSize: "0.6vw" }}>
+                                            <Table>
                                                 <thead>
                                                     <tr>
-                                                        <th> Title </th>
-                                                        <th> Description </th>
-                                                        <th> Milestones </th>
-                                                        <th> Website </th>
-                                                        <th >Github</th>
-                                                        <th >Twitter</th>
-                                                        <th >Start Date</th>
-                                                        <th >End Date</th>
-                                                        <th >Request funding</th>
-                                                        <td>
-                                                            
-                                                        </td>
+                                                        <th>Title</th>
+                                                        <th>Descriptions</th>
+                                                        <th>Website</th>
+                                                        <th>Github</th>
+                                                        <th>Twitter</th>
+                                                        <th>Start Date</th>
+                                                        <th style={{width: '120px'}} title="Request funding">RF</th>
+                                                        <th style={{width: '100px'}}></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>

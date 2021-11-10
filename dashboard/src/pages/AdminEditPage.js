@@ -24,16 +24,16 @@ import * as Yup from 'yup';
 
 const editSchema = Yup.object().shape({
     name: Yup.string()
-        .required('Mời tên'),
+        .required('Name'),
     email: Yup.string()
-        .required('Mời nhập email')
-        .email('Email sai định dạng'),
+        .required('Email')
+        .email('Mailform'),
     password: Yup.string()
-        .min(6,'Password nhỏ nhất là 6 ký tự')
-        .max(32, 'Password lớn nhất là 32 ký tự')
+        .min(6,'Password length is from 6-32')
+        .max(32, 'Password length is from 6-32')
         .nullable(),
     repassword: Yup.string()
-        .oneOf([Yup.ref('password'), null], 'Password không khớp')
+        .oneOf([Yup.ref('password'), null], 'Password not match')
 
 });
 class AdminEditPage extends React.Component {

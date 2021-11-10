@@ -12,6 +12,14 @@
 }
 
 .TablePage {
+  .cr-page__header {
+    align-items: center;
+    justify-content: center;
+    padding: 24px 0;
+    .h1{
+      font-size: 28px!important;
+    }
+  }
   .card-body {
     overflow: hidden;
   }

@@ -17,39 +17,79 @@ import 'froala-editor/css/froala_style.min.css';
 import 'froala-editor/css/froala_editor.pkgd.min.css';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import Select from 'react-select';
+import { getOneProposal, approve, reject } from '../store/actions/proposals';
 
-const createSchema = Yup.object().shape({
-    name: Yup.string()
-        .required('Mời tên'),
-    email: Yup.string()
-        .email('Email sai định dạng'),
-    password: Yup.string()
-        .min(6,'Password nhỏ nhất là 6 ký tự')
-        .max(32, 'Password lớn nhất là 32 ký tự')
-        .nullable(),
-    phone: Yup.string()
-        .matches(/^([0-9])\d{9,11}$/,{
-            message: 'Điên thoại sai định dạng'
-        }).required('Mời nhập số điện thoại'),
-    introduce: Yup.string().nullable(),
-    dob: Yup.date('Ngày sinh nhật phải là ngày').nullable(),
-    repassword: Yup.string()
-        .oneOf([Yup.ref('password'), null], 'Password không khớp')
-
+const approveSchema = Yup.object().shape({
+    title: Yup.string().required('Required'),
+    summary: Yup.string().required('Required'),
+    milestones: Yup.string().required('Required'),
+    team: Yup.string().required('Required'),
+    twitter: Yup.string().required('Required'),
+    website: Yup.string().required('Required'),
+    // communityProof: Yup.string().required('Required'),
+    fundingRequest:  Yup.number().required('Required'),
+    github: Yup.string().required('Required'),
+    neededQuorum: Yup.number().required('Required'),
+    // start: Yup.number(),
 });
+
+const rejectSchema = Yup.object().shape({
+    title: Yup.string().required('Required'),
+    summary: Yup.string().required('Required'),
+    milestones: Yup.string().required('Required'),
+    team: Yup.string().required('Required'),
+    twitter: Yup.string().required('Required'),
+    website: Yup.string().required('Required'),
+    communityProof: Yup.string().required('Required'),
+    fundingRequest:  Yup.number().required('Required'),
+    github: Yup.string().required('Required'),
+    reason: Yup.string().required('Required'),
+    neededQuorum: Yup.number(),
+    start: Yup.number(),
+});
+
 class ProposalsDetailPage extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            detail: {}
+            detail: null
         }
     }
 
+    requestProposal = () => {
+        this.props.getOneProposal(this.props.match.params.id).then((data) => {
+            console.log(data)
+            this.setState({
+                detail: data.payload,
+            })
+        }).catch((err) => {
+            alert(JSON.stringify(err))
+        })
+    }
+
+    componentDidMount() {
+        this.requestProposal()
+    }
+
+    approve = async (id, values) => {
+        delete values.rejected;
+        this.props.approve(id, values).then((data) => {
+            alert("You've approved the proposal " + id);
+        }).catch((err) => {
+            alert(JSON.stringify(err))
+        })
+    }
+
+    reject = async (id, reason) => {
+        this.props.reject(id, reason).then((data) => {
+            alert("You've rejected the proposal " + id);
+        }).catch((err) => {
+            alert(JSON.stringify(err))
+        })
+    }
+
     render() {
-        let options = []
-      
         let errMsg;
         if(this.state.error && this.state.error.errorMsg){
             errMsg = <UncontrolledAlert color="danger">
@@ -58,188 +98,321 @@ class ProposalsDetailPage extends React.Component {
         }
         return (
             <Page
-                title="Tạo người môi giới"
-                breadcrumbs={[{ name: 'proposals', active: true }]}
+                title="Proposal Detail"
                 className="TablePage"
             >
-                <Row>
-                    <Col xl={12} lg={12} md={12}>
+                <Row className="justify-content-center">
+                    <Col md={8} xl={5}>
                         <Card>
-                            <CardHeader>Tạo người môi giới</CardHeader>
                             <CardBody>
-                                <Formik
+                                {this.state.detail ?<Formik
                                     initialValues={
                                         {
-                                            name: this.state.detail.name,
-                                            email: this.state.detail.email,
-                                            password: "",
-                                            phone: this.state.detail.phone,
-                                            introduce: this.state.detail.introduce,
+                                            title: this.state.detail.title,
+                                            summary: this.state.detail.summary,
+                                            milestones: this.state.detail.milestones,
+                                            team: this.state.detail.team,
+                                            twitter: this.state.detail.twitter,
+                                            github: this.state.detail.github,
+                                            website: this.state.detail.website,
+                                            telegram: this.state.detail.telegram,
+                                            // communityProof: this.state.detail.communityProof,
+                                            fundingRequest: this.state.detail.fundingRequest,
+                                            neededQuorum: this.state.detail.neededQuorum,
+                                            reason: this.state.detail.reason,
+                                            // start: this.state.detail.start,
                                         }
                                     }
-                                    validationSchema={createSchema }
+                                    validationSchema={approveSchema }
                                     onSubmit={async values => {
-                                        console.log(values);
-                                        history.push('/proposals/'+this.state.match.params.id+'?success=true');
+                                        if (values.rejected) {
+                                            this.reject(this.props.match.params.id, values.reason);
+                                        } else {
+                                            this.approve(this.props.match.params.id, values);
+                                        }
+                                        // history.push('/proposals/'+this.state.match.params.id+'?success=true');
                                     }}
                                 >
                                     {({ errors, touched, values, handleChange,handleBlur, setFieldValue }) => (
                                         <Form>
                                             {errMsg}
                                             <FormGroup>
-                                                <Label for="name">Tên</Label>
+                                                <Label for="title">Title</Label>
                                                 <Input
                                                     type="text"
-                                                    name="name"
+                                                    name="title"
                                                     onChange={evt => {
                                                         let value = evt.target.value;
                                                         if(value){
                                                             value = value.toLowerCase();
                                                         }
                                                         setFieldValue(
-                                                            "name",
+                                                            "title",
                                                             value
                                                         )
                                                     }
                                                     }
                                                     onBlur={handleBlur}
-                                                    placeholder="Tên người môi giới"
-                                                    value={values.name}
+                                                    placeholder="Proposal title"
+                                                    value={values.title}
                                                 />
-                                                {errors.name && touched.name ? (
+                                                {errors.title && touched.title ? (
                                                     <UncontrolledAlert color="danger">
-                                                        {errors.name}
+                                                        {errors.title}
                                                     </UncontrolledAlert>
                                                 ) : null}
                                             </FormGroup>
                                             <FormGroup>
-                                                <Label for="name">Điện thoại</Label>
-                                                <Input
-                                                    type="text"
-                                                    name="phone"
-                                                    onChange={handleChange}
-                                                    onBlur={handleBlur}
-                                                    placeholder="Điện thoại môi giới"
-                                                    value={values.phone}
-                                                />
-                                                {errors.phone && touched.phone ? (
-                                                    <UncontrolledAlert color="danger">
-                                                        {errors.phone}
-                                                    </UncontrolledAlert>
-                                                ) : null}
-                                            </FormGroup>
-                                            <FormGroup>
-                                                <Label for="email">Email</Label>
-                                                <Input
-                                                    type="email"
-                                                    name="email"
-                                                    onChange={evt => {
-                                                        let value = evt.target.value;
-                                                        if(value){
-                                                            value = value.toLowerCase();
-                                                        }
-                                                        setFieldValue(
-                                                            "email",
-                                                            value
-                                                        )
-                                                    }
-                                                    }
-                                                    onBlur={handleBlur}
-                                                    placeholder="Email Người môi giới"
-                                                    value={values.email}
-                                                />
-                                                {errors.email && touched.email ? (
-                                                    <UncontrolledAlert color="danger">
-                                                        {errors.email}
-                                                    </UncontrolledAlert>
-                                                ) : null}
-                                            </FormGroup>
-                                            <FormGroup>
-                                                <Label for="password">Password</Label>
-                                                <Input
-                                                    type="password"
-                                                    name="password"
-                                                    onChange={handleChange}
-                                                    onBlur={handleBlur}
-                                                    placeholder="Mật khẩu"
-                                                    value={values.password}
-                                                />
-                                                {errors.password && touched.password ? (
-                                                    <UncontrolledAlert color="danger">
-                                                        {errors.password}
-                                                    </UncontrolledAlert>
-                                                ) : null}
-                                            </FormGroup>
-                                            <FormGroup>
-                                                <Label for="repassword">Nhập lại password</Label>
-                                                <Input
-                                                    type="password"
-                                                    name="repassword"
-                                                    onChange={handleChange}
-                                                    onBlur={handleBlur}
-                                                    placeholder="Mật khẩu"
-                                                    value={values.repassword}
-                                                />
-                                                {errors.repassword && touched.reassword ? (
-                                                    <UncontrolledAlert color="danger">
-                                                        {errors.repassword}
-                                                    </UncontrolledAlert>
-                                                ) : null}
-                                            </FormGroup>
-                                            <FormGroup>
-                                                <Label for="introduce">Giới thiệu</Label>
+                                                <Label for="summary">Summary</Label>
                                                 <Input
                                                     type="textarea"
-                                                    name="introduce"
+                                                    name="summary"
                                                     onChange={handleChange}
                                                     onBlur={handleBlur}
                                                     placeholder=""
-                                                    value={values.introduce}
+                                                    value={values.summary}
                                                 />
-                                                {errors.introduce && touched.introduce ? (
+                                                {errors.summary && touched.summary ? (
                                                     <UncontrolledAlert color="danger">
-                                                        {errors.introduce}
+                                                        {errors.summary}
+                                                    </UncontrolledAlert>
+                                                ) : null}
+                                            </FormGroup>
+                                            <FormGroup>
+                                                <Label for="milestones">milestones</Label>
+                                                <Input
+                                                    type="textarea"
+                                                    name="milestones"
+                                                    onChange={handleChange}
+                                                    onBlur={handleBlur}
+                                                    placeholder=""
+                                                    value={values.milestones}
+                                                />
+                                                {errors.milestones && touched.milestones ? (
+                                                    <UncontrolledAlert color="danger">
+                                                        {errors.milestones}
+                                                    </UncontrolledAlert>
+                                                ) : null}
+                                            </FormGroup>
+                                            <FormGroup>
+                                                <Label for="team">team</Label>
+                                                <Input
+                                                    type="textarea"
+                                                    name="team"
+                                                    onChange={handleChange}
+                                                    onBlur={handleBlur}
+                                                    placeholder=""
+                                                    value={values.team}
+                                                />
+                                                {errors.team && touched.team ? (
+                                                    <UncontrolledAlert color="danger">
+                                                        {errors.team}
                                                     </UncontrolledAlert>
                                                 ) : null}
                                             </FormGroup>
 
+                                            {/* <FormGroup>
+                                                <Label for="communityProof">communityProof</Label>
+                                                <Input
+                                                    type="textarea"
+                                                    name="communityProof"
+                                                    onChange={handleChange}
+                                                    onBlur={handleBlur}
+                                                    placeholder=""
+                                                    value={values.communityProof}
+                                                />
+                                                {errors.communityProof && touched.communityProof ? (
+                                                    <UncontrolledAlert color="danger">
+                                                        {errors.communityProof}
+                                                    </UncontrolledAlert>
+                                                ) : null}
+                                            </FormGroup> */}
+                                            
                                             <FormGroup>
-                                                <Label for="company">Công ty</Label>
-                                                <br></br>
-                                                {this.state.detail&&this.state.detail.broker&&this.state.detail.broker.company?this.state.detail.broker.company.name:null}
-                                                <br></br>
-                                                <Select
-                                                    name="company"
-                                                    value={values.company}
-                                                    onChange={(value) => {
+                                                <Label for="website">website</Label>
+                                                <Input
+                                                    type="text"
+                                                    name="website"
+                                                    onChange={evt => {
+                                                        let value = evt.target.value;
                                                         if(value){
-                                                            value = JSON.parse(value.value);
+                                                            value = value.toLowerCase();
                                                         }
                                                         setFieldValue(
-                                                            "company",
+                                                            "website",
                                                             value
                                                         )
                                                     }
                                                     }
                                                     onBlur={handleBlur}
-                                                    options={options}
+                                                    placeholder="Proposal website"
+                                                    value={values.website}
                                                 />
+                                                {errors.website && touched.website ? (
+                                                    <UncontrolledAlert color="danger">
+                                                        {errors.website}
+                                                    </UncontrolledAlert>
+                                                ) : null}
                                             </FormGroup>
-                                            <FormGroup>
-                                                <Label for="dob">Ngày sinh</Label>
-                                                <Input type="text" name="dob"
-                                                       onChange={handleChange}
-                                                       onBlur={handleBlur}
-                                                       value={values.dob}
-                                                >
-                                                </Input>
-                                            </FormGroup>
-                                            <Button color="success" type='submit'>Gửi</Button>
 
+                                            <FormGroup>
+                                                <Label for="github">github</Label>
+                                                <Input
+                                                    type="text"
+                                                    name="github"
+                                                    onChange={evt => {
+                                                        let value = evt.target.value;
+                                                        if(value){
+                                                            value = value.toLowerCase();
+                                                        }
+                                                        setFieldValue(
+                                                            "github",
+                                                            value
+                                                        )
+                                                    }
+                                                    }
+                                                    onBlur={handleBlur}
+                                                    placeholder="Proposal github"
+                                                    value={values.github}
+                                                />
+                                                {errors.github && touched.github ? (
+                                                    <UncontrolledAlert color="danger">
+                                                        {errors.github}
+                                                    </UncontrolledAlert>
+                                                ) : null}
+                                            </FormGroup>
+                                            
+                                            <FormGroup>
+                                                <Label for="twitter">twitter</Label>
+                                                <Input
+                                                    type="text"
+                                                    name="twitter"
+                                                    onChange={evt => {
+                                                        let value = evt.target.value;
+                                                        if(value){
+                                                            value = value.toLowerCase();
+                                                        }
+                                                        setFieldValue(
+                                                            "twitter",
+                                                            value
+                                                        )
+                                                    }
+                                                    }
+                                                    onBlur={handleBlur}
+                                                    placeholder="Proposal twitter"
+                                                    value={values.twitter}
+                                                />
+                                                {errors.twitter && touched.twitter ? (
+                                                    <UncontrolledAlert color="danger">
+                                                        {errors.twitter}
+                                                    </UncontrolledAlert>
+                                                ) : null}
+                                            </FormGroup>
+                                            
+                                            <FormGroup>
+                                                <Label for="telegram">telegram</Label>
+                                                <Input
+                                                    type="text"
+                                                    name="telegram"
+                                                    onChange={evt => {
+                                                        let value = evt.target.value;
+                                                        if(value){
+                                                            value = value.toLowerCase();
+                                                        }
+                                                        setFieldValue(
+                                                            "telegram",
+                                                            value
+                                                        )
+                                                    }
+                                                    }
+                                                    onBlur={handleBlur}
+                                                    placeholder="Proposal telegram"
+                                                    value={values.telegram}
+                                                />
+                                                {errors.telegram && touched.telegram ? (
+                                                    <UncontrolledAlert color="danger">
+                                                        {errors.telegram}
+                                                    </UncontrolledAlert>
+                                                ) : null}
+                                            </FormGroup>
+
+                                            <FormGroup>
+                                                <Label for="fundingRequest">fundingRequest</Label>
+                                                <Input
+                                                    type="number"
+                                                    name="fundingRequest"
+                                                    onChange={evt => {
+                                                        let value = evt.target.value;
+                                                        if(value){
+                                                            value = value.toLowerCase();
+                                                        }
+                                                        setFieldValue(
+                                                            "fundingRequest",
+                                                            value
+                                                        )
+                                                    }
+                                                    }
+                                                    onBlur={handleBlur}
+                                                    placeholder="Proposal fundingRequest"
+                                                    value={values.fundingRequest}
+                                                />
+                                                {errors.fundingRequest && touched.fundingRequest ? (
+                                                    <UncontrolledAlert color="danger">
+                                                        {errors.fundingRequest}
+                                                    </UncontrolledAlert>
+                                                ) : null}
+                                            </FormGroup>
+
+                                            <FormGroup>
+                                                <Label for="neededQuorum">neededQuorum</Label>
+                                                <Input
+                                                    type="number"
+                                                    name="neededQuorum"
+                                                    onChange={evt => {
+                                                        let value = evt.target.value;
+                                                        if(value){
+                                                            value = value.toLowerCase();
+                                                        }
+                                                        setFieldValue(
+                                                            "neededQuorum",
+                                                            value
+                                                        )
+                                                    }
+                                                    }
+                                                    onBlur={handleBlur}
+                                                    placeholder="Proposal neededQuorum"
+                                                    value={values.neededQuorum}
+                                                />
+                                                {errors.neededQuorum && touched.neededQuorum ? (
+                                                    <UncontrolledAlert color="danger">
+                                                        {errors.neededQuorum}
+                                                    </UncontrolledAlert>
+                                                ) : null}
+                                            </FormGroup>
+
+                                            <FormGroup>
+                                                <Label for="reason">reason</Label>
+                                                <Input
+                                                    type="textarea"
+                                                    name="reason"
+                                                    onChange={handleChange}
+                                                    onBlur={handleBlur}
+                                                    placeholder=""
+                                                    value={values.reason}
+                                                />
+                                                {errors.reason && touched.reason ? (
+                                                    <UncontrolledAlert color="danger">
+                                                        {errors.reason}
+                                                    </UncontrolledAlert>
+                                                ) : null}
+                                            </FormGroup>
+
+                                            <Button color="success" type='submit' onClick={() => {values.rejected = false}}>Approve</Button>
+                                            <Button color="danger" type='submit' onClick={() => {values.rejected = true}} style={{marginLeft: "10px"}}>Reject</Button>
                                         </Form>
                                     )}
 
-                                </Formik>
+                                </Formik> : ""}
                             </CardBody>
                         </Card>
                     </Col>
@@ -255,4 +428,4 @@ export default connect((state) => {
         detail: [],
         error: null,
     }
-}, {})(ProposalsDetailPage);
+}, {getOneProposal, approve, reject})(ProposalsDetailPage);
