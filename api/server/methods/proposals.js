@@ -72,9 +72,9 @@ const getProposals = async function (request, h) {
     const proposals = await Proposal.findAndCountAll({
         limit: lm,
         offset: (page-1)*lm,
-        where: {
-            status: "PENDING"
-        },
+        // where: {
+        //     status: "PENDING"
+        // },
         order: [
           ['created', 'DESC']
         ],
