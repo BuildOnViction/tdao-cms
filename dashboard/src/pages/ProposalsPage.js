@@ -114,7 +114,8 @@ class ProposalsPage extends React.Component {
             data = this.state.data.map((proposal, i) => {
                 return (<tr key={i}>
                     <td><a href={proposal.title} title={proposal.title}>{proposal.title}</a></td>
-                    <td><a href={proposal.descriptions} title={proposal.descriptions}>{proposal.descriptions}</a></td>
+                    <td><a href={proposal.status} className={"btn-theme proposal_" + proposal.status}>{proposal.status}</a></td>
+                    <td><a href={proposal.summary} title={proposal.summary}>{proposal.summary}</a></td>
                     {/* <td><a href={proposal.milestones} title={proposal.milestones}>{proposal.milestones}</a></td> */}
                     <td><a href={proposal.website} title={proposal.website}>{proposal.website}</a></td>
                     <td><a href={proposal.github} title={proposal.github}>{proposal.github}</a></td>
@@ -126,7 +127,7 @@ class ProposalsPage extends React.Component {
                         <div className="text-center">
                             <Link className="link-detail" to={"/proposals/"+proposal.id}>Detail</Link>
                             <br />
-                            <Button className="btn-t1-medium" color="danger" onClick={()=>{ this.approve(proposal.id);}}>Approve</Button>
+                            {/* <Button className="btn-t1-medium" color="danger" onClick={()=>{ this.approve(proposal.id);}}>Approve</Button> */}
                         </div>
                     </td>
                 </tr>)
@@ -134,7 +135,7 @@ class ProposalsPage extends React.Component {
         }
         return (
             <Page
-                title="Pending Proposal"
+                title="Proposals"
                 breadcrumbs={[{ name: 'proposals', active: true }]}
                 className="style-table"
             >
@@ -149,7 +150,8 @@ class ProposalsPage extends React.Component {
                                                 <thead>
                                                     <tr>
                                                         <th>Title</th>
-                                                        <th>Descriptions</th>
+                                                        <th>Status</th>
+                                                        <th>Summary</th>
                                                         <th>Website</th>
                                                         <th>Github</th>
                                                         <th>Twitter</th>

@@ -1,4 +1,4 @@
-export const BASEURL = "http://localhost:9879/";
+export const BASEURL = "http://206.189.39.242:9879/";
 export default BASEURL;
 
 export const FREELY_ACCESS_PAGES = {

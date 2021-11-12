@@ -29,7 +29,7 @@ module.exports = {
             id: Joi.string().description('the id to get the proposal')
         },
         payload: {
-            reason: Joi.string().length(1000),
+            reason: Joi.string(),
         }
     },
 };

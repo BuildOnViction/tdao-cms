@@ -61,28 +61,56 @@
     vertical-align: middle;
 }
 
-.btn-t1-medium {
+.btn-theme {
+    border: 0;
+    border-radius: 20px;
+    display: inline-block;
     padding: 3px 10px;
     font-size: 14px;
-    background: #00C59A;
-    border: 0;
     margin-top: 5px;
+    text-align: center;
+    min-width: 100px;
+    text-decoration: none!important;
+}
+
+.btn-theme:hover {
+    font-weight: bold;
+}
+
+.proposal_REJECTED {
+    background: #6a737d;
+    color: #ffffff !important;
+}
+
+.proposal_APPROVED {
+    background: #00C59A;
+    color: #ffffff !important;
+}
+
+.proposal_ACTIVE {
+    background: #17a2b8;
+    color: #fff !important;
+}
+
+.proposal_PENDING {
+    background: #721c24;
+    color: #ffffff !important;
 }
 
 .btn-t1-medium:hover {
     background: #0da887;
 }
 
-.style-table a {
+/* .style-table a {
     color: #0da887;
-}
+} */
 
-.style-table a:hover {
+/* .style-table a:hover {
     color: #0da887;
-}
+} */
 
 .style-table .pagination li a {
-    background: #0da887!important;
+    background: #17a2b8!important;
 }
 
 .style-table .pagination li a:hover {
