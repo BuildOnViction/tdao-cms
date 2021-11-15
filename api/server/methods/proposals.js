@@ -112,7 +112,7 @@ const rejectProposal = async function (request, h) {
 const approveProposal = async function (request, h) {
     let id = request.params.id;
 
-    request.payload.status = 'APPROVED';
+    request.payload.status = 'ACTIVE';
     request.payload.approvedBy = request.auth.credentials.user._doc;
 
     if (new Date(request.payload.start*1000).valueOf() < new Date().valueOf() ) {
