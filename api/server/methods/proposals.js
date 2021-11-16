@@ -72,9 +72,9 @@ const getProposals = async function (request, h) {
     const proposals = await Proposal.findAndCountAll({
         limit: lm,
         offset: (page-1)*lm,
-        where: {
-            status: "PENDING"
-        },
+        // where: {
+        //     status: "PENDING"
+        // },
         order: [
           ['created', 'DESC']
         ],
@@ -114,6 +114,11 @@ const approveProposal = async function (request, h) {
 
     request.payload.status = 'APPROVED';
     request.payload.approvedBy = request.auth.credentials.user._doc;
+
+    if (new Date(request.payload.start*1000).valueOf() < new Date().valueOf() ) {
+        request.payload.start = parseInt(new Date().valueOf()/1000);
+    }
+
     const result = await Proposal.update(request.payload,{
         where: {
             id: id,
